@@ -1,0 +1,26 @@
+https://wikidocs.net/175970
+db 사용법
+
+192.168.0.2
+uvicorn main:app --reload
+
+ip 와 api 실행
+
+프론트 엔드
+http://localhost:5173/
+백엔드
+http://127.0.0.1:8000/
+
+2024-02-10
+https://wikidocs.net/176222
+여기까지 진행함
+
+2024-02-11
+https://wikidocs.net/175068
+
+$ 문법
+https://velog.io/@terra/SVELTE-%EA%B8%B0%EC%B4%88-%EB%AC%B8%EB%B2%95
+
+db 목록이 변경되었을 때,
+alembic revision --autogenerate
+alembic upgrade head

@@ -1,0 +1,117 @@
+from fastapi import APIRouter,HTTPException
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from starlette import status
+from datetime import timedelta, datetime
+from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordBearer
+from jose import jwt,JWTError
+from argon2.exceptions import VerificationError
+
+
+from database import get_db
+from domain.user import user_crud, user_schema
+from domain.user.user_crud import pwd_context
+
+# https://velog.io/@munang/Python-FastAPI-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%A3%BC%EC%9E%85-Depends-%ED%95%A8%EC%88%98
+# Depends 함수는 그 안에 있는 값을 먼저 실행함
+
+
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+SECRET_KEY = "23e8d781d997f31840bb859eb644c918181a6135b311ea0787deb58cf5f96b77"
+ALGORITHM = "HS256"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
+
+router = APIRouter(
+    prefix="/api/user",
+)
+
+
+@router.get("/list", response_model=user_schema.UserList)
+def user_list(db: Session = Depends(get_db),
+                  school_class : int = 1):
+    total, _user_list = user_crud.get_user_list(
+        db, school_class=school_class)
+    
+    #print(f"_question_list : {_user_list.first().school_number}")
+    
+    return {
+        'total': total,
+        'user_list': _user_list
+    }
+    
+# user 의 세부 정보를 알려주는 창
+@router.get("/detail/{school_number}", response_model=user_schema.User)
+def user_detail(school_number: int, db: Session = Depends(get_db)):
+    user = user_crud.get_user(db, school_number=school_number)
+    return user
+
+
+
+# user 생성
+@router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
+def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
+    user = user_crud.get_existing_user(db, user_create=_user_create)
+    if user: # 409 Conflict
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="이미 존재하는 사용자입니다.")
+    
+    
+    user_crud.create_user(db=db, user_create=_user_create)
+    
+    
+@router.post("/login", response_model=user_schema.Token)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
+                           db: Session = Depends(get_db)):
+
+    # check user and password
+    #print(f"form_data.username : {form_data.username}")
+    user = user_crud.get_user2name(db, form_data.username)
+    # user.password : hash 값, form_data.password : 입력값
+    try:
+        if not user or not pwd_context.verify(user.password,form_data.password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="아이디 또는 비밀번호가 잘못되었습니다.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except VerificationError:
+            raise HTTPException(
+                status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                detail="아이디 또는 비밀번호가 잘못되었습니다.",
+                headers={"WWW-Authenticate": "Bearer"},
+                )    
+
+    # make access token
+    data = {
+        "sub": user.username,
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    }
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "username": user.username,
+        "school_number": str(user.school_number)
+    }
+    
+def get_current_user(token: str = Depends(oauth2_scheme),
+                     db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    else:
+        print(f'get_current_user user name : {username}')
+        user = user_crud.get_user2name(db, username=username)
+        if user is None:
+            raise credentials_exception
+        return user

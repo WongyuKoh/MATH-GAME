@@ -1,0 +1,24 @@
+1.
+migrations 파일
+version 파일
+alembic.ini 파일
+db 파일 삭제
+
+2.
+alembic init migrations
+
+3. 
+alembic.ini 파일
+sqlalchemy.url = sqlite:///./myapi.db
+
+4.
+env.py
+(... 생략 ...)
+import models
+(... 생략 ...)
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+target_metadata = models.Base.metadata
+(... 생략 ...)
