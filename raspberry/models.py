@@ -31,6 +31,8 @@ class User(Base):
 class Record(Base): # user 에 종속, record 복수
     __tablename__ = "record"
 
+    main_category=Column(String,nullable=False)
+
     id = Column(Integer, primary_key=True)
     score = Column(Integer,nullable=False, primary_key=False)
     correct_pb_cnt = Column(Integer, primary_key=False)
@@ -38,6 +40,7 @@ class Record(Base): # user 에 종속, record 복수
     
     
     create_date = Column(DateTime, nullable=False)
+    user_name = Column(String,nullable=False,primary_key=False)
     user_id = Column(Integer, ForeignKey("user.school_number"), nullable=True)
     user = relationship("User",backref="records")
     

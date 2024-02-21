@@ -7,6 +7,7 @@
   import UserCreate from "./routes/UserCreate.svelte"
   import UserLogin from "./routes/UserLogin.svelte"
   import User from "./routes/User.svelte"
+  import Rank from './routes/Rank.svelte';
 
   
 
@@ -16,6 +17,7 @@
     '/user-login': UserLogin,
     '/profile/:school_number/log/:record_id/': Detail,
     '/profile/:school_number' : User,
+    '/rank' : Rank
     
     /*
     '/detail/:question_id': Detail,

@@ -23,6 +23,8 @@ def get_existing_user(db: Session, user_create: UserCreate):
 def get_user(db: Session, school_number: str):
     return db.query(User).filter(User.school_number == school_number).first()
 
+
+
 def get_user2name(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 

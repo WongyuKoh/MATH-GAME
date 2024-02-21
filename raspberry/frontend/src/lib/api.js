@@ -50,6 +50,7 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
                 .then(json => {
                     if(response.status >= 200 && response.status < 300) {  // 200 ~ 299
                         if(success_callback) {
+
                             success_callback(json)
 
                         

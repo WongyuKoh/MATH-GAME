@@ -52,18 +52,27 @@
 
     export let params = {}
     let school_number = params.school_number
-    let user_list = {records:[]}
+    let records = {record_list:[]}
     let error = {detail:[]}
     let username = ""
+    let rank = 0
 
-    function get_question() {
-        fastapi("get", "/api/user/detail/" + school_number, {}, (json) => {
-            user_list = json
-            username = json.username
+    function get_record(category) { /*user의 record*/
+        fastapi("get", "/api/record/record-by-category/" + school_number+"/"+category+"/10", {}, (json) => {
+            records = json
         })
     }
 
-    get_question()
+    function get_score() {
+        fastapi("get", "/api/rank/user-profile/" + school_number, {}, (json) => {
+            rank = json.rank
+            username = json.info.user_name
+        })
+    }
+
+
+    get_record("test")
+    get_score()
 
 </script>
 
@@ -78,7 +87,7 @@
                         <img src="https://i.ibb.co/CwwJsL4/init-profile.png" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
                             <h4>{username}({school_number})</h4>
-                            <p class="text-secondary mb-1">{school_number}등</p>
+                            <p class="text-secondary mb-1">{rank}등</p>
                         </div>
                     </div>
                 </div>
@@ -87,9 +96,10 @@
             <!-- 밑에 내용 -->
 
             <div class="col-md-7"> <!-- md : 가로 사이즈, mb : 세로 사이즈-->
+                <h5><b>수열 기록</b></h5>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row text-bg-dark p-3">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">점수</h6>
                             </div>
@@ -104,20 +114,24 @@
                             </div>
                         </div>
                         <hr>
-                        {#each user_list.records as record, i}
+                        {#each records.record_list as record, i}
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">{record.score}점</h6>
                                 </div>
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0">{Math.round(100*(record.correct_pb_cnt)/(record.correct_pb_cnt+record.wrong_pb_cnt))}%</h6>
+                                    {#if (record.correct_pb_cnt+record.wrong_pb_cnt)==0}
+                                    <h6 class="mb-0">0%</h6>
+                                    {:else}
+                                        <h6 class="mb-0">{Math.round(100*(record.correct_pb_cnt)/(record.correct_pb_cnt+record.wrong_pb_cnt))}%</h6>
+                                    {/if}
                                 </div>
                                 <div class="col-sm-3"><!--moment(user.create_date).format("YYYY년 MM월 DD일 hh:mm a")-->
                                     <h6 class="mb-0">{moment(record.create_date).format("YYYY년 MM월 DD일")}</h6>
                                 </div>
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">
-                                        <a use:link href="/profile/{user_list.school_number}/log/{record.id}/">자세히 보기</a>
+                                        <a use:link href="/profile/{school_number}/log/{record.id}/">자세히 보기</a>
                                     </h6>
                                 </div>
                             </div>
@@ -153,6 +167,16 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+                    
                     <div class="col-sm-6 mb-3">
                         <div class="card h-100">
                             <div class="card-body">

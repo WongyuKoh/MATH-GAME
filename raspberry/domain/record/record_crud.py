@@ -15,16 +15,28 @@ def get_record(db: Session, question_id: int):
 
 def create_record(db: Session, user : User,
                   record_create: RecordCreate):
+    
 
     db_record = Record(
                          correct_pb_cnt=record_create.correct_pb_cnt,
                            wrong_pb_cnt=record_create.wrong_pb_cnt,
                            create_date=datetime.now(), score=record_create.score,
-                           user=user)
+                           main_category=record_create.main_category,
+                           user=user,user_name=user.username)
     db.add(db_record)
     db.commit()
     
     return db_record
+
+def get_record_by_category(db: Session, school_number : int, category : str,cnt : int):
+    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.main_category==category)
+    
+    get_record_by_category=_get_record_by_category.limit(cnt).all()
+    return get_record_by_category
+
+"""create_record(db, user=user,
+                              record_create=_record_create,
+                              record=current_user)"""
     
 """def get_record_list(db: Session, skip: int = 0, limit: int = 10): # skip : 데이터 시작 위치, limit : 데이터 건수
     _question_list = db.query(Record)\

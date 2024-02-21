@@ -47,6 +47,7 @@ def user_detail(school_number: int, db: Session = Depends(get_db)):
 
 
 
+
 # user 생성
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
@@ -110,7 +111,7 @@ def get_current_user(token: str = Depends(oauth2_scheme),
     except JWTError:
         raise credentials_exception
     else:
-        print(f'get_current_user user name : {username}')
+        #print(f'get_current_user user name : {username}')
         user = user_crud.get_user2name(db, username=username)
         if user is None:
             raise credentials_exception
