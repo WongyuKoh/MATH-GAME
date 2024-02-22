@@ -34,6 +34,12 @@ def get_record_by_category(db: Session, school_number : int, category : str,cnt 
     get_record_by_category=_get_record_by_category.limit(cnt).all()
     return get_record_by_category
 
+def get_record_by_category_all(db: Session, school_number : int, category : str):
+    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.main_category==category).all()
+    
+    
+    return _get_record_by_category
+
 """create_record(db, user=user,
                               record_create=_record_create,
                               record=current_user)"""

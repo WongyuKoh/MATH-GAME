@@ -43,3 +43,13 @@ def user_record_category(db: Session = Depends(get_db),
     
     
     return {"record_list":rank_user_list}
+
+@router.get("/record-by-category-all/{school_number}/{category}", response_model=record_schema.RecordList)
+def user_record_category(db: Session = Depends(get_db),
+                  school_number : int = 11111, category : str = ""):
+
+    rank_user_list = record_crud.get_record_by_category_all(
+        db, school_number=school_number,category=category)
+    
+    
+    return {"record_list":rank_user_list}

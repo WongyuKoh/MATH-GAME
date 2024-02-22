@@ -22,6 +22,8 @@ const persist_storage = (key, initValue) => {
     return store
 }
 
+
+export const sub_category_page = persist_storage("sub_category_page", "")
 export const school_class = persist_storage("school_class", 1)
 export const access_token = persist_storage("access_token", "")
 export const username = persist_storage("username", "")

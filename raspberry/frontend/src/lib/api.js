@@ -7,7 +7,6 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     let method = operation
     let content_type = 'application/json'
     let body = JSON.stringify(params) /*{"content":"입력"}*/
-
     if(operation === 'login') {
         method = 'post'
         content_type = 'application/x-www-form-urlencoded'
@@ -19,7 +18,6 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     if(method === 'get') {
         _url += "?" + new URLSearchParams(params)
     }
-
     let options = {
         method: method,
         headers: {
@@ -39,7 +37,7 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     fetch(_url, options)
         .then(response => { /* fetch 를 통해 들어온 값이 then 의 response 에 입력되서 then 안에 있는 임의 함수를 실행함*/
             
-        
+
         if(response.status === 204) {  // No content
                 if(success_callback) {
                     success_callback()
@@ -48,6 +46,7 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
             }
             response.json()
                 .then(json => {
+
                     if(response.status >= 200 && response.status < 300) {  // 200 ~ 299
                         if(success_callback) {
 

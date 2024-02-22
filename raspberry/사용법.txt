@@ -1,6 +1,9 @@
 https://wikidocs.net/175970
 db 사용법
 
+https://engineer-mole.tistory.com/327
+sqlalchemy 사용법
+
 192.168.0.2
 uvicorn main:app --reload
 

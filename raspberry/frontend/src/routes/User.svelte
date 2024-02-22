@@ -47,20 +47,43 @@
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
     import { is_login } from "../lib/store"
+    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
+    import { slide } from "svelte/transition";
     moment.locale('ko')
 
     export let params = {}
     let school_number = params.school_number
-    let records = {record_list:[]}
+    let records = {}
     let error = {detail:[]}
     let username = ""
     let rank = 0
+    let slice_cnt=3
+    let Main_category = []
+    for(const category_name of MAIN_CATEGORY){
+        Main_category.push({category_name:category_name,cnt:0})
+    }
+
+    
+    let gameplay_sum=0
 
     function get_record(category) { /*user의 record*/
-        fastapi("get", "/api/record/record-by-category/" + school_number+"/"+category+"/10", {}, (json) => {
+        fastapi("get", "/api/record/record-by-category/" + school_number+"/"+category+"/3", {}, (json) => {
             records = json
         })
+    }
+
+    function get_record_all() { /*user의 record*/
+        for(const [index, sub_catgeory] of Main_category.entries()){
+            records[sub_catgeory.category_name]={record_list:[]}
+
+            fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_catgeory.category_name, {}, (json) => {
+                records[sub_catgeory.category_name]=json
+                records[sub_catgeory.category_name].record_list = records[sub_catgeory.category_name].record_list.slice(0,slice_cnt)
+                Main_category[index].cnt=json.record_list.length
+                gameplay_sum+=Main_category[index].cnt
+            })
+        }
     }
 
     function get_score() {
@@ -71,7 +94,7 @@
     }
 
 
-    get_record("test")
+    get_record_all()
     get_score()
 
 </script>
@@ -80,6 +103,7 @@
 
 <div class="container">
     <div class="main-body">
+        
         <div class="row gutters-sm">
             <div class="col-md-3 mb-3"><!-- md : 가로 사이즈, mb : 세로 사이즈-->
                 <div class="card card-body">
@@ -94,116 +118,68 @@
             </div>
 
             <!-- 밑에 내용 -->
+            
 
-            <div class="col-md-7"> <!-- md : 가로 사이즈, mb : 세로 사이즈-->
-                <h5><b>수열 기록</b></h5>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row text-bg-dark p-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">점수</h6>
-                            </div>
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">정확도</h6>
-                            </div>
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">플레이 날짜</h6>
-                            </div>
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">자세히 보기</h6>
+            <!-- 게임 기록 --><!-- md : 가로 사이즈, mb : 세로 사이즈-->
+            <div class="col-md-7">
+                <div class="GAME-RECORD">
+                    {#each MAIN_CATEGORY as category_name, i}
+                        <h5><b>{category_name}</b></h5>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <table class="table text-center"> <!-- 부트스 트랩 5 버전의 이름만 가지고 와서 사용하면 됨-->
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">점수</th>
+                                        <th scope="col">정확도</th>
+                                        <th scope="col">플레이 날짜</th>
+                                        <th scope="col">detail</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {#each records[category_name].record_list as record, i}
+                                            <tr>
+                                                <td>{record.score}점</td>
+                                                <td>
+                                                    {#if (record.correct_pb_cnt+record.wrong_pb_cnt)==0}
+                                                        {"0%"}
+                                                    {:else}
+                                                        {Math.round(100*(record.correct_pb_cnt)/(record.correct_pb_cnt+record.wrong_pb_cnt))}%
+                                                    {/if}
+                                                </td>
+                                                <td>
+                                                    {moment(record.create_date).format("YYYY년 MM월 DD일 hh:mm")}
+                                                </td>
+                                                <td>
+                                                    <a use:link href="/profile/{school_number}/log/{record.id}">자세히 보기</a>
+                                                </td>
+                                        {/each}
+                                    </tbody>
+                                </table>
+                                <div class="text-center">
+                                    <a use:link href="/profile/{school_number}/Record-Detail/{category_name}" class="btn btn-primary">더보기</a>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        {#each records.record_list as record, i}
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">{record.score}점</h6>
-                                </div>
-                                <div class="col-sm-3">
-                                    {#if (record.correct_pb_cnt+record.wrong_pb_cnt)==0}
-                                    <h6 class="mb-0">0%</h6>
-                                    {:else}
-                                        <h6 class="mb-0">{Math.round(100*(record.correct_pb_cnt)/(record.correct_pb_cnt+record.wrong_pb_cnt))}%</h6>
-                                    {/if}
-                                </div>
-                                <div class="col-sm-3"><!--moment(user.create_date).format("YYYY년 MM월 DD일 hh:mm a")-->
-                                    <h6 class="mb-0">{moment(record.create_date).format("YYYY년 MM월 DD일")}</h6>
-                                </div>
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">
-                                        <a use:link href="/profile/{school_number}/log/{record.id}/">자세히 보기</a>
-                                    </h6>
-                                </div>
-                            </div>
-                            <hr>
-                        {/each}
-                    </div>
+                    {/each}
                 </div>
                 <div class="row gutters-sm">
                     <div class="col-sm-6 mb-3">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                                <small>Web Design</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Website Markup</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>One Page</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Mobile Template</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Backend API</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <h6 class="d-flex align-items-center mb-3"><b>게임 시도 횟수</b></h6>
+                                {#each Main_category as sub_category, i}
+
+                                
+                                    <small>{sub_category.category_name}({sub_category.cnt} times)</small>
+                                    <div class="progress mb-3" style="height: 5px">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {(sub_category.cnt/gameplay_sum)*100}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                {/each}
                             </div>
                         </div>
                     </div>
 
-
-
-
-
-
-
-
-
-                    
-                    <div class="col-sm-6 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                                <small>Web Design</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Website Markup</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>One Page</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Mobile Template</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <small>Backend API</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
