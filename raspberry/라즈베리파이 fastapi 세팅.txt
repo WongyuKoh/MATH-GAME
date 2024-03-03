@@ -1,0 +1,22 @@
+라즈베리파이 fastapi 세팅
+
+https://m.blog.naver.com/emperonics/222293573401
+
+1.fastapi 설치
+https://forums.raspberrypi.com/viewtopic.php?t=357911
+
+1-1. python3 -m venv dbapi
+1-2. 시작 cmd 에서 dbapi/bin/pip install fastapi 실행
+
+https://lky1001.tistory.com/149
+
+2. nodejs 설치
+
+https://thenicesj.tistory.com/578
+
+https://deb.nodesource.com/setup_21.x
+
+2-1. sudo apt update
+2-2. sudo apt dist-upgrade
+2-3. 
+
