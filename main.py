@@ -20,7 +20,9 @@ import pygame
 import time
 from copy import deepcopy as dc
 from math import * 
+import requests
 import os
+from datetime import datetime
 from pygame.locals import QUIT,KEYDOWN,K_LEFT,K_RIGHT,K_UP,K_DOWN,Rect,MOUSEBUTTONDOWN,K_SPACE,K_a,K_x,K_z,K_LCTRL,K_RCTRL ,VIDEORESIZE
 pygame.init()
 FPSCLOCK = pygame.time.Clock()
@@ -34,7 +36,7 @@ class Virtual_Object(pygame.sprite.Sprite):
         self.radius=0
 
 
-font_path=os.getenv('SystemRoot')
+#font_path=os.getenv('SystemRoot')
 PATH=os.path.abspath('.')+'/image/'
 #291 613
 k=1.5
@@ -68,6 +70,7 @@ color={
 MAP=[]
 
 IMAGE={
+    "keyboard.png":pygame.image.load(PATH+"keyboard.png").convert_alpha(),
     "board.png":pygame.image.load(PATH+"board.png").convert_alpha(),
     "mole.png":pygame.image.load(PATH+"mole.png").convert_alpha(),
     "hide_up.png":pygame.image.load(PATH+"hide_up.png").convert_alpha(),
@@ -84,6 +87,25 @@ IMAGE={
        
 }
 MASK={}
+
+
+#keyboard
+K=(size[0]-side_blank_space[0]*4)/IMAGE["board.png"].get_width()
+keyboard_size=[K*IMAGE["board.png"].get_width(),IMAGE["keyboard.png"].get_height()*K/1.5]
+IMAGE["keyboard.png"]=pygame.transform.scale(IMAGE["keyboard.png"],keyboard_size)
+keybaord_rect=IMAGE["keyboard.png"].get_rect()
+keybaord_rect.bottomleft = (side_blank_space[0]*2,size[1]-side_blank_space[1]*(0.5))
+
+#login
+myfont=pygame.font.SysFont('malgungothic', 30, True, False) 
+#login-explain
+explain_text = myfont.render("학번을 입력해주세요.", True, color["black"])
+explain_text_rect = explain_text.get_rect()
+explain_text_rect.center=(size[0]/2,keybaord_rect.bottomleft[1]-keyboard_size[1]-side_blank_space[1]*1.5)
+
+
+
+
 #board.png
 K=(size[0]-side_blank_space[0]*4)/IMAGE["board.png"].get_height()
 board_size=[IMAGE["board.png"].get_height()*K*1.5,IMAGE["board.png"].get_width()*K/2.3]
@@ -165,8 +187,8 @@ class PB(pygame.sprite.Sprite):
         
         self.text_size=50
         
-        self.myFont = pygame.font.SysFont('/'.join([font_path,'fonts/arial.ttc']), self.text_size, True, False) 
-        self.port_myFont = pygame.font.SysFont('/'.join([font_path,'fonts/arial.ttc']), self.text_size//3, True, False) 
+        self.myFont = pygame.font.SysFont('arial', self.text_size, True, False) 
+        self.port_myFont = pygame.font.SysFont('arial', self.text_size//3, True, False) 
         self.text="5,15,□,35,45,55"
         self.port_text="a"
         self.text_pos=(self.board_pos[0],self.board_pos[1]+board_size[1]/2-4)
@@ -300,7 +322,7 @@ class MOLE(pygame.sprite.Sprite):
         
         #text
         
-        self.myFont = pygame.font.SysFont('/'.join([font_path,'fonts/arial.ttc']), 22, True, False) # 7자리 20, 6자리 22, 5자리 25, 4자리 30  | 최대 30
+        self.myFont = pygame.font.SysFont('arial', 22, True, False) # 7자리 20, 6자리 22, 5자리 25, 4자리 30  | 최대 30
         self.text=str(text)
         self.text_pos=(self.mole_pos[0],self.mole_pos[1]+10)
         #_Title= self.myFont.render("Pygame Text Test", True, color["black"])
@@ -400,7 +422,7 @@ class ALARM():
         
         
         
-        self.re_text_font = pygame.font.SysFont('/'.join([font_path,'fonts/malgungothic.ttc']), re_txt_size, True, False)
+        self.re_text_font = pygame.font.SysFont('malgungothic', re_txt_size, True, False)
         self.re_text=\
         """
         """
@@ -448,6 +470,7 @@ class ALARM():
         
     def close_button_click(self):
         self.Gamerule=0
+        
 
         
     def gamerule(self):
@@ -469,6 +492,25 @@ class ALARM():
         pygame.draw.rect(SURFACE,color["whitegray"],[side_blank_space[0]/2,side_blank_space[1]*2,size[0]-side_blank_space[0],size[1]-side_blank_space[1]*10])
         
         self.re_text=f"Game Finished!!\nYour Score is {SCORE}"
+        
+        """upload={
+            "main_category": "",
+            "correct_pb_cnt": 4440,
+            "wrong_pb_cnt": 3330,
+            "score": 144231330,
+            "user_name": "",
+            "create_date": datetime.now(),
+            "detail": [
+                {
+                "category": "1112222",
+                "problem": "33334444",
+                "problem_answer": "qqqqqwwww",
+                "user_answers": "ddddzzzxss"
+                }
+            ]
+            }
+        
+        requests.post("http://127.0.0.1:8000/api/record/create/20402/", json=upload)"""
             
         self.retry_button()
         stack=self.re_text.split("\n")
@@ -488,13 +530,13 @@ class interface():
         self.start_time=0
         self.time_pos=time_pos
         self.time_size=40
-        self.time_font = pygame.font.SysFont('/'.join([font_path,'fonts/malgungothic.ttc']), self.time_size, True, False)
+        self.time_font = pygame.font.SysFont('malgungothic', self.time_size, True, False)
         self.Time=0
         
         #score
         self.score_pos=(self.time_pos[0],self.time_pos[1]+self.time_size)
         self.score_size=30
-        self.score_font = pygame.font.SysFont('/'.join([font_path,'fonts/malgungothic.ttc']), self.score_size, True, False)
+        self.score_font = pygame.font.SysFont('malgungothic', self.score_size, True, False)
         
             
         
@@ -538,6 +580,8 @@ def new_mole(pos,p,ans):
         MAP[pos[1]][pos[0]].POS=pos
 
         return 0
+
+
 
 def GAMESTART():
     global MAP,mousepointer,alarm,INTERFACE,tile_left_up_pos,PROBLEM
@@ -718,6 +762,7 @@ mousepointer=MousePointer()
 alarm=ALARM()
 tile_left_up_pos=[center[0]-(MAP_SIZE[0]/2)*mole_box_size[0],]
 INTERFACE=interface([side_blank_space[0],PROBLEM.board_pos[1]+board_size[1]+side_blank_space[1]+mole_box_size[1]*MAP_SIZE[1]])
+login=True
 
 def GAME_LOBY():
     global SURFACE,alarm,mousepointer,INTERFACE 
@@ -738,10 +783,12 @@ def GAME_LOBY():
                         else:
                             A=mousepointer.mousepointer_crash_vo
                             
-                        A.rect.center=pygame.mouse.get_pos()
-                        
-                        if pygame.sprite.collide_mask(A,alarm.close_button_vo):
-                            alarm.Gamerule=0
+                        if login:
+                            
+                            A.rect.center=pygame.mouse.get_pos()
+                            
+                            if pygame.sprite.collide_mask(A,alarm.close_button_vo):
+                                alarm.Gamerule=0
                 
                 if pygame.mouse.get_pressed()[0]:
 
@@ -750,22 +797,30 @@ def GAME_LOBY():
                     else:
                         A=mousepointer.mousepointer_crash_vo
                         
-                    A.rect.center=pygame.mouse.get_pos()
-                    
-                    
-                    if pygame.sprite.collide_mask(A,alarm.start_vo):
-                        GAMESTART()
-                            
-                    if pygame.sprite.collide_mask(A,alarm.gamerule_vo):
-                        alarm.Gamerule=1
-                    
-                    
-        if alarm.Gamerule==1:
-            alarm.gamerule()
-                    
-        else:           
-            alarm.start_button()
-            alarm.gamerule_button()
+                        
+                    if login:
+                        
+                        A.rect.center=pygame.mouse.get_pos()
+                        
+                        
+                        if pygame.sprite.collide_mask(A,alarm.start_vo):
+                            GAMESTART()
+                                
+                        if pygame.sprite.collide_mask(A,alarm.gamerule_vo):
+                            alarm.Gamerule=1
+             
+        if login:       
+            if alarm.Gamerule==1:
+                alarm.gamerule()
+                        
+            else:           
+                alarm.start_button()
+                alarm.gamerule_button()
+                
+        else:
+            SURFACE.blit(IMAGE["keyboard.png"],keybaord_rect)
+            SURFACE.blit(explain_text,explain_text_rect)
+            
         mousepointer.draw(pygame.mouse.get_pos())
         
         pygame.display.update()

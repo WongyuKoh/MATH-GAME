@@ -27,3 +27,6 @@ https://velog.io/@terra/SVELTE-%EA%B8%B0%EC%B4%88-%EB%AC%B8%EB%B2%95
 db 목록이 변경되었을 때,
 alembic revision --autogenerate
 alembic upgrade head
+
+https://www.yougetsignal.com/tools/open-ports/
+포트포워딩이 되고 있는지 확인 여부 사이트

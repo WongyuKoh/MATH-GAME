@@ -57,7 +57,7 @@
     let records = {}
     let error = {detail:[]}
     let username = ""
-    let rank = 0
+    let rank = {}
     let slice_cnt=3
     let Main_category = []
     for(const category_name of MAIN_CATEGORY){
@@ -67,39 +67,56 @@
     
     let gameplay_sum=0
 
-    function get_record(category) { /*user의 record*/
-        fastapi("get", "/api/record/record-by-category/" + school_number+"/"+category+"/3", {}, (json) => {
-            records = json
-        })
-    }
 
     function get_record_all() { /*user의 record*/
-        for(const [index, sub_catgeory] of Main_category.entries()){
-            records[sub_catgeory.category_name]={record_list:[]}
+        fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
+            username=json.username
+        })
+        for(const [index, sub_category] of Main_category.entries()){
+            records[sub_category.category_name]={record_list:[]}
 
-            fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_catgeory.category_name, {}, (json) => {
-                records[sub_catgeory.category_name]=json
-                records[sub_catgeory.category_name].record_list = records[sub_catgeory.category_name].record_list.slice(0,slice_cnt)
+            fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_category.category_name, {}, (json) => {
+                records[sub_category.category_name]=json
+                records[sub_category.category_name].record_list = records[sub_category.category_name].record_list.slice(0,slice_cnt)
                 Main_category[index].cnt=json.record_list.length
                 gameplay_sum+=Main_category[index].cnt
+                if(Main_category[index].cnt==0){
+                    rank[sub_category.category_name]="999+"
+
+                }else{
+                    fastapi("get", "/api/rank/user-profile/" + school_number + "/" + sub_category.category_name, {}, (json) => {
+                        rank[sub_category.category_name] = json.rank
+                    })
+                }
             })
         }
     }
 
     function get_score() {
-        fastapi("get", "/api/rank/user-profile/" + school_number, {}, (json) => {
-            rank = json.rank
-            username = json.info.user_name
+        fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
+            username=json.username
         })
+        console.log("MAIN_category")
+        console.log(Main_category)
+        for(const [index, sub_category] of Main_category.entries()){
+            console.log(Main_category[index].cnt,sub_category)
+            console.log(sub_category.cnt,records,records[sub_category.category_name],records[sub_category.category_name].record_list.length)
+            if(sub_category.cnt==0){
+                rank[sub_category.category_name]="999+"
+
+            }else{
+                fastapi("get", "/api/rank/user-profile/" + school_number, {}, (json) => {
+                    rank[sub_category.category_name] = json.rank
+                })
+            }
+        }
     }
 
 
     get_record_all()
-    get_score()
+
 
 </script>
-
-<link href="raspberry_database/frontend/src/app.css" rel="stylesheet" type="text/css" />
 
 <div class="container">
     <div class="main-body">
@@ -111,7 +128,9 @@
                         <img src="https://i.ibb.co/CwwJsL4/init-profile.png" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
                             <h4>{username}({school_number})</h4>
-                            <p class="text-secondary mb-1">{rank}등</p>
+                            {#each MAIN_CATEGORY as category_name,i}
+                                <p class="text-secondary mb-1">{category_name} : {rank[category_name]}등</p>
+                            {/each}
                         </div>
                     </div>
                 </div>

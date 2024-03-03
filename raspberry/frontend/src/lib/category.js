@@ -1,1 +1,1 @@
-export const MAIN_CATEGORY=["test","a","b","c"]
+export const MAIN_CATEGORY=["수열","로그","지수"]

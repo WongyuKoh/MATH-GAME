@@ -34,7 +34,6 @@ tr  : table row, 가로줄 만드는거(데이터 들어가는 라인의 가장 
 th : table head , 표의 제목
 td : table data, 셀을 만드는 역할
 -->
-<link href="raspberry_database/frontend/src/app.css" rel="stylesheet" type="text/css" />
 <div class="container my-3">
     <div class="GAME-RECORD">
         <h5><b>{$sub_category_page}</b></h5>

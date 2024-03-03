@@ -24,8 +24,6 @@ class RecordCreate(BaseModel):
     correct_pb_cnt : int = 0
     wrong_pb_cnt : int = 0
     score : int = 0
-    user_name : str = ""
-    create_date: datetime.datetime
     detail : list[Detail] = [Detail()]
     
 

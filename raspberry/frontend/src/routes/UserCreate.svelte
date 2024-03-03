@@ -30,6 +30,13 @@
 </script>
 
 <div class="container">
+    <div class="main-body d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card text-center">
+                <h3><b>학번은 2024학년도 2학년 학번으로 해주세요.</b></h3>
+            </div>
+        </div>
+    </div>
     <h5 class="my-3 border-bottom pb-2">회원 가입</h5>
     <Error error={error} />
     <form method="post">

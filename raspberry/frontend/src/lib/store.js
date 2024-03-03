@@ -22,7 +22,7 @@ const persist_storage = (key, initValue) => {
     return store
 }
 
-
+export const rank_category_page = persist_storage("rank_category_page","수열")
 export const sub_category_page = persist_storage("sub_category_page", "")
 export const school_class = persist_storage("school_class", 1)
 export const access_token = persist_storage("access_token", "")

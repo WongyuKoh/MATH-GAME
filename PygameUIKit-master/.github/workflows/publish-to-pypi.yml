@@ -1,0 +1,32 @@
+name: Publish to PyPI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt 
+        python -m pip install --upgrade build twine
+
+    - name: Build and Publish to PyPI
+      run: |
+        python -m build
+        python -m twine upload --skip-existing --verbose --repository pypi dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}

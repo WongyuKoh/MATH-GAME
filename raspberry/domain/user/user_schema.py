@@ -39,6 +39,12 @@ class User(BaseModel):
     class Config:
         from_attributes = True
         
+class UserName(BaseModel):
+    school_number : int
+    username: str
+    
+    class Config:
+        from_attributes = True
         
 class UserList(BaseModel):
     total: int = 0

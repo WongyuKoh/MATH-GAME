@@ -47,7 +47,7 @@
   th : table head , 표의 제목
   td : table data, 셀을 만드는 역할
 -->
-<link href="raspberry_database/frontend/src/app.css" rel="stylesheet" type="text/css" />
+
 <div class="container my-3">
   <table class="table">
       <thead>
@@ -55,7 +55,6 @@
           <th>번호</th>
           <th>이름</th>
           <th>플레이 횟수</th>
-          <th>idx</th>
       </tr>
       </thead>
       <tbody>
@@ -66,7 +65,6 @@
               <a use:link href="/profile/{Number(user.school_number)}">{user.username}</a>
           </td>
           <td>{Object.keys(user.records).length}</td>
-          <td>{i}</td>
           <!--<td>{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</td>-->
       </tr>
       {/each}

@@ -2,7 +2,7 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
-    import { school_number,is_login,username } from "../lib/store"
+    import {is_login } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
@@ -10,6 +10,13 @@
     export let params = {}
     let record_id = params.record_id
     let record_detail_list = []
+    let username=""
+    let school_number = params.school_number
+    let katex=1;
+
+    fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
+        username=json.username
+    })
 
 
     function get_question() {
@@ -20,7 +27,18 @@
     }
     $: get_question()
 
+    window.WebFontConfig = {
+        custom: {
+            families: ['KaTeX_AMS', 'KaTeX_Caligraphic:n4,n7', 'KaTeX_Fraktur:n4,n7',
+            'KaTeX_Main:n4,n7,i4,i7', 'KaTeX_Math:i4,i7', 'KaTeX_Script',
+            'KaTeX_SansSerif:n4,n7,i4', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3',
+            'KaTeX_Size4', 'KaTeX_Typewriter'],
+        },
+    };
+
+
 </script>
+
 
 <div class="container my-3">
     <table class="table">
@@ -29,7 +47,7 @@
             <th>문제</th>
             <th>카테고리</th>
             <th>문제 답</th>
-            <th>{$username}의 답</th>
+            <th>{username}의 답</th>
         </tr>
         </thead>
         <tbody>

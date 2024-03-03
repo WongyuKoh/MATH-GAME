@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post("/create/{school_number}/", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/create/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def record_create(school_number: int,
                   _record_create: record_schema.RecordCreate,
                   db: Session = Depends(get_db)):

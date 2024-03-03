@@ -25,6 +25,9 @@
                         <a use:link class="nav-link" href="/rank">랭킹</a>
                     </li>
                     <li class="nav-item">
+                        <a use:link class="nav-link" href="/game">게임</a>
+                    </li>
+                    <li class="nav-item">
                         <a use:link class="nav-link" href="/user-login" on:click={() => {
                             $access_token = ''
                             $username = ''

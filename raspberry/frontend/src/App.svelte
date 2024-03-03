@@ -8,7 +8,7 @@
   import User from "./routes/User.svelte"
   import Rank from './routes/Rank.svelte'
   import Record_Detail from './routes/Record_Detail.svelte'
-
+  import Game from './routes/Game.svelte'
   
 
   const routes = {
@@ -19,6 +19,7 @@
     '/profile/:school_number' : User,
     '/profile/:school_number/Record-Detail/:category':Record_Detail,
     '/rank' : Rank,
+    '/game' : Game,
 
     
     /*

@@ -45,7 +45,11 @@ def user_detail(school_number: int, db: Session = Depends(get_db)):
     user = user_crud.get_user(db, school_number=school_number)
     return user
 
-
+# 학번 입력시 유저 이름 알려주기
+@router.get("/username/{school_number}", response_model=user_schema.UserName)
+def user_detail(school_number: int, db: Session = Depends(get_db)):
+    user = user_crud.get_username(db, school_number=school_number)
+    return {"school_number":user.school_number,"username":user.username}
 
 
 # user 생성

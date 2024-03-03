@@ -1,0 +1,248 @@
+/*https://codingeverybody.kr/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EB%A1%9C-css-%EB%B3%80%EC%88%98-%EC%A0%9C%EC%96%B4%ED%95%98%EA%B8%B0-%EC%A0%91%EA%B7%BC%EA%B3%BC-%EC%84%A4%EC%A0%95-%EB%B0%A9%EB%B2%95/*/
+/*
+animation : https://coding-levup.tistory.com/20
+*/
+*{
+    padding: 0;
+}
+
+html, body{
+    width: 1150px;
+    height: 900px;
+    margin: 0 auto;
+}
+
+@media (max-width:1150px){
+    html,body {
+        width:100%;
+        height: 78.3%;
+        margin: 0 auto;
+    }
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(129,193,71);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+.GAME{
+    width: 70%;
+    height: 100%;
+    position: relative;
+}
+
+.cursor{
+    height: 100px; /* 높이 */
+    width: 100px; /* 너비 */
+    position: absolute;
+    background-image: url('./image/hammer.png');
+    background-size: 100% 100%;
+    transition: background-image .3s ease-out;
+    pointer-events: none;
+}
+
+
+.score{
+    position: relative;
+    font-size: 2em;
+    margin-left: 2em;
+    margin-bottom: .5em;
+}
+.timer{
+    position: relative;
+    font-size: 2em;
+    margin-left: 2em;
+}
+
+
+.pb_board{
+    height: 30%;
+    width: 80%;
+    margin : 0 auto;
+    background-image: url("./image/board.png");
+    background-size: 100% 100%;
+}
+
+.board{
+    height: 55%;
+    width: 60%;
+    display: grid;
+    margin: 0 auto;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+}
+.hole{ /* unset 는 부모의 상속*/
+    width: 100%;
+    height: 100%;
+    position: relative;
+    
+}
+.hole-in{ /* unset 는 부모의 상속*/
+    width: 86%;
+    height: 34%;
+    position: absolute;
+    background-image: url("./image/hole_in.png");
+    background-size: 100% 100%;
+    transform: translateX(7%) translateY(134%); /* translate 는 전체 사이즈 기준 퍼센트*/
+    
+}
+.hole-top{ /* unset 는 부모의 상속*/
+    width: 100%;
+    height: 62%;
+    position: absolute;
+    background-image: url("./image/hide_up.png");
+    background-size: 100% 100%;
+    top:0%;
+}
+.hole-bottom{ /* unset 는 부모의 상속*/
+    width: 100%;
+    height: 62%;
+    pointer-events: none;
+    position: absolute;
+    background-image: url("./image/hide_down.png");
+    background-size: 100% 100%;
+    top: 62%;
+}
+
+.mole{
+    width: 71%;
+    height: 71%;
+
+    left:14.5%;
+
+    font-size: 100%;
+    font-weight: bold;
+    color: black;
+
+    transform: translateY(60%);
+
+    position: absolute;
+
+}
+
+.mole .text-rise{
+    width: 100%;
+    height: 50%;
+
+    pointer-events: none;
+
+
+    position: absolute;
+    text-align: center;
+    transform: translateY(110%);
+
+    animation-name: text-rise;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+    
+}
+
+.mole .mole-rise{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    animation-name: rise;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+}
+
+
+.mole .mole-down{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    animation-name: down;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+}
+
+.mole .text-down{
+    width: 100%;
+    height: 50%;
+
+    pointer-events: none;
+
+    position: absolute;
+    text-align: center;
+    transform: translateY(110%);
+
+    animation-name: text-down;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes rise { /* -% : 위로. +% : 아래로*/
+    0%{
+        transform: translateX(0%) translateY(0%);
+    }
+    100%{
+        transform: translateX(0%) translateY(-47%);
+    }
+}
+
+@keyframes down { /* -% : 위로. +% : 아래로*/
+    0%{
+        transform: translateX(0%) translateY(-47%);
+    }
+    100%{
+        transform: translateX(0%) translateY(0%);
+    }
+}
+
+@keyframes text-rise { /* -% : 위로. +% : 아래로*/
+    0%{
+        transform: translateX(0%) translateY(110%);
+    }
+    100%{
+        transform: translateX(0%) translateY(16%);
+    }
+}
+
+@keyframes text-down { /* -% : 위로. +% : 아래로*/
+    0%{
+        transform: translateX(0%) translateY(16%);
+    }
+    100%{
+        transform: translateX(0%) translateY(110%);
+    }
+}
+
+
+
+
+
+
+
+
+
+.cursor.active{
+    animation-name: hammer_crash;
+    animation-duration: .3s;
+
+}
+
+@keyframes hammer_crash {
+    0%{
+        background-image: url('./image/hammer_crash.png');
+    }
+    100%{
+        background-image: url('./image/hammer.png');
+    }
+}
