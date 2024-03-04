@@ -13,7 +13,6 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     let error = {detail:[]}
     let login_username = ""
     let login_password = ""
-    
 
     function login(event) {
         event.preventDefault()

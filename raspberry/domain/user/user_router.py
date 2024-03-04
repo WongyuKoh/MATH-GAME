@@ -51,6 +51,27 @@ def user_detail(school_number: int, db: Session = Depends(get_db)):
     user = user_crud.get_username(db, school_number=school_number)
     return {"school_number":user.school_number,"username":user.username}
 
+# --------------------------------
+# 존재하는 학번인지 확인
+@router.get("/user-exist/{school_number}", response_model=user_schema.UserExit)
+def User_Exit(school_number: int, db: Session = Depends(get_db)):
+    user_exit = user_crud.get_user_exit(db, school_number=school_number)
+    return {"user_exit":user_exit} 
+
+
+# 계정 삭제
+@router.post("/school-number-delete/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
+def User_delete(school_number: int, db: Session = Depends(get_db)):
+    user_crud.user_delete(db, school_number=school_number)
+
+
+# 비밀번호 변경
+@router.post("/password-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
+def user_detail(school_number: int, new_password: str, db: Session = Depends(get_db)):
+    user_crud.user_password_change(db, school_number=school_number,new_password=new_password)
+
+
+# -----------------------------------
 
 # user 생성
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)

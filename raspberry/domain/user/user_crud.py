@@ -20,12 +20,32 @@ def get_existing_user(db: Session, user_create: UserCreate):
     ).first()
     
     
-def get_user(db: Session, school_number: str):
+def get_user(db: Session, school_number: int):
+
     return db.query(User).filter(User.school_number == school_number).first()
 
-def get_username(db: Session, school_number: str):
+def get_username(db: Session, school_number: int):
     return db.query(User).filter(User.school_number == school_number).first()
 
+def get_user_exit(db:Session,school_number:int):
+
+    cnt=len(db.query(User).filter(User.school_number == school_number).all())
+    if(cnt==0):return False
+    else: return True
+    
+def user_delete(db:Session,school_number:int): # get 은 filter 없을때만 작동
+    ID=db.query(User).filter(User.school_number == school_number).first()
+
+    db.delete(ID)
+    db.commit()
+    
+def user_password_change(db:Session,school_number:int,new_password:str):
+
+    ID=db.query(User).filter(User.school_number == school_number).first()
+    ID.password=pwd_context.hash(new_password)
+    db.commit()
+    
+    
 
 def get_user2name(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()

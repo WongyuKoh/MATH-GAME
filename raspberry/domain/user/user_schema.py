@@ -49,3 +49,7 @@ class UserName(BaseModel):
 class UserList(BaseModel):
     total: int = 0
     user_list : list[User] = []
+    
+class UserExit(BaseModel):
+    user_exit : bool = True
+    

@@ -46,14 +46,14 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
-    import { is_login } from "../lib/store"
+    import { is_login,school_number } from "../lib/store"
     import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     import { slide } from "svelte/transition";
     moment.locale('ko')
 
     export let params = {}
-    let school_number = params.school_number
+    let page_school_number = params.school_number
     let records = {}
     let error = {detail:[]}
     let username = ""
@@ -69,13 +69,13 @@
 
 
     function get_record_all() { /*user의 record*/
-        fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
+        fastapi("get", "/api/user/username/" + page_school_number, {}, (json) => {
             username=json.username
         })
         for(const [index, sub_category] of Main_category.entries()){
             records[sub_category.category_name]={record_list:[]}
 
-            fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_category.category_name, {}, (json) => {
+            fastapi("get", "/api/record/record-by-category-all/" + page_school_number+"/"+sub_category.category_name, {}, (json) => {
                 records[sub_category.category_name]=json
                 records[sub_category.category_name].record_list = records[sub_category.category_name].record_list.slice(0,slice_cnt)
                 Main_category[index].cnt=json.record_list.length
@@ -84,7 +84,7 @@
                     rank[sub_category.category_name]="999+"
 
                 }else{
-                    fastapi("get", "/api/rank/user-profile/" + school_number + "/" + sub_category.category_name, {}, (json) => {
+                    fastapi("get", "/api/rank/user-profile/" + page_school_number + "/" + sub_category.category_name, {}, (json) => {
                         rank[sub_category.category_name] = json.rank
                     })
                 }
@@ -93,7 +93,7 @@
     }
 
     function get_score() {
-        fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
+        fastapi("get", "/api/user/username/" + page_school_number, {}, (json) => {
             username=json.username
         })
         console.log("MAIN_category")
@@ -105,7 +105,7 @@
                 rank[sub_category.category_name]="999+"
 
             }else{
-                fastapi("get", "/api/rank/user-profile/" + school_number, {}, (json) => {
+                fastapi("get", "/api/rank/user-profile/" + page_school_number, {}, (json) => {
                     rank[sub_category.category_name] = json.rank
                 })
             }
@@ -127,13 +127,21 @@
                     <div class="d-flex flex-column align-items-center text-center">
                         <img src="https://i.ibb.co/CwwJsL4/init-profile.png" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
-                            <h4>{username}({school_number})</h4>
+                            <h4>{username}({page_school_number})</h4>
                             {#each MAIN_CATEGORY as category_name,i}
                                 <p class="text-secondary mb-1">{category_name} : {rank[category_name]}등</p>
                             {/each}
                         </div>
                     </div>
                 </div>
+                <!-- 프로필 수정 버튼-->
+                {#if page_school_number==$school_number}
+                    <div class="align-items-right d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a use:link href="/profile/{page_school_number}/setting" class="btn btn-secondary btn-lg">
+                            ⚙️
+                        </a>
+                    </div>
+                {/if}
             </div>
 
             <!-- 밑에 내용 -->
@@ -170,13 +178,13 @@
                                                     {moment(record.create_date).format("YYYY년 MM월 DD일 hh:mm")}
                                                 </td>
                                                 <td>
-                                                    <a use:link href="/profile/{school_number}/log/{record.id}">자세히 보기</a>
+                                                    <a use:link href="/profile/{page_school_number}/log/{record.id}">자세히 보기</a>
                                                 </td>
                                         {/each}
                                     </tbody>
                                 </table>
                                 <div class="text-center">
-                                    <a use:link href="/profile/{school_number}/Record-Detail/{category_name}" class="btn btn-primary">더보기</a>
+                                    <a use:link href="/profile/{page_school_number}/Record-Detail/{category_name}" class="btn btn-primary">더보기</a>
                                 </div>
                             </div>
                         </div>
@@ -188,8 +196,6 @@
                             <div class="card-body">
                                 <h6 class="d-flex align-items-center mb-3"><b>게임 시도 횟수</b></h6>
                                 {#each Main_category as sub_category, i}
-
-                                
                                     <small>{sub_category.category_name}({sub_category.cnt} times)</small>
                                     <div class="progress mb-3" style="height: 5px">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: {(sub_category.cnt/gameplay_sum)*100}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
