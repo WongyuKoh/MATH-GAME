@@ -52,7 +52,7 @@
                     "이때 첫번째 항을 초항, \n\n 더하는 일정한 수를 공차라고 합니다.\n\n"+\
                     "이정도 내용을 숙지하고 이제 게임을 즐겨봅시다!!" -->
 
-                    <a href="https://python-programmer1512.github.io/KWG07.github.io/" class="btn btn-primary">게임 하러가기</a>
+                    <a href="https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/" class="btn btn-primary">게임 하러가기</a>
                 </div>
             </div>
         </div>
