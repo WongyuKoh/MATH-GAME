@@ -134,6 +134,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <!-- 프로필 수정 버튼-->
                 {#if page_school_number==$school_number}
                     <div class="align-items-right d-grid gap-2 d-md-flex justify-content-md-end">

@@ -67,9 +67,20 @@ def User_delete(school_number: int, db: Session = Depends(get_db)):
 
 # 비밀번호 변경
 @router.post("/password-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
-def user_detail(school_number: int, new_password: str, db: Session = Depends(get_db)):
+def user_change_password(school_number: int, new_password: str, db: Session = Depends(get_db)):
     user_crud.user_password_change(db, school_number=school_number,new_password=new_password)
 
+# 이름 변경 (아직)
+@router.post("/username-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
+def user_change_username(school_number: int, new_username: str, db: Session = Depends(get_db)):
+    user_crud.user_username_change(db, school_number=school_number,new_username=new_username)
+
+# 학번 변경 (아직)
+@router.post("/school-number-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
+def user_change_school_number(school_number: int, new_school_number: str, db: Session = Depends(get_db)):
+    val=user_crud.user_school_number_change(db, school_number=school_number,new_school_number=new_school_number)
+    if not val:
+        raise HTTPException(status_code=404, detail="user not found")
 
 # -----------------------------------
 

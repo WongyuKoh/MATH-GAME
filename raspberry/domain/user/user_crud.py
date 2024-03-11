@@ -1,7 +1,8 @@
 #from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from domain.user.user_schema import UserCreate
-from models import User
+from models import User,Record
+import asyncio
 from argon2 import PasswordHasher
 
 #pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") bcrypt 코드
@@ -45,7 +46,34 @@ def user_password_change(db:Session,school_number:int,new_password:str):
     ID.password=pwd_context.hash(new_password)
     db.commit()
     
+def user_username_change(db:Session,school_number:int,new_username:str):
+
+    ID=db.query(User).filter(User.school_number == school_number).first()
+    ID.username=new_username
+    db.commit()
     
+def user_school_number_change(db:Session,school_number:int,new_school_number:str):
+    
+    if get_user_exit(db,school_number):
+        
+        ID=db.query(User).filter(User.school_number == school_number).first()
+        ID.school_number=new_school_number
+        db.commit()
+        async def change_school_number(school_number,new_school_number):
+            change_list=db.query(Record).filter(Record.user_id==school_number).all()
+            for data in change_list:
+                data.user_id = new_school_number
+                
+            db.commit()
+            
+        asyncio.run(change_school_number(school_number=school_number,new_school_number=new_school_number))
+        
+        return 1
+    
+    else:
+        return 0
+        
+
 
 def get_user2name(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()

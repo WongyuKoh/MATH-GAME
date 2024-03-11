@@ -46,7 +46,7 @@ class Record(Base): # user 에 종속, record 복수
     
     
     
-class Detail(Base): # user 에 종속, record 복수
+class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     __tablename__ = "detail"
 
     id = Column(Integer, primary_key=True)
