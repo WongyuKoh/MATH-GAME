@@ -15,8 +15,9 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     let school_number = params.school_number
     let username = ""
     let change_new_password = ""
-    let change_password=0
-
+    let change_password = 0
+    let delete_user = 0
+    
     function USERNAME(){
         fastapi("get", "/api/user/username/" + school_number, {}, (json) => {
             username=json.username
@@ -38,6 +39,16 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
         })
     }
 
+    function DELETE_USER(){
+        fastapi("change", "/api/user/school-number-delete/" + school_number, {}, (json) => {
+            delete_user=1
+        },
+        (json_error) => {
+            error = json_error
+        })
+    }
+
+
     USERNAME()
     
 </script>
@@ -57,13 +68,22 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
         </div>
     </div>
     <Error error={error} />
-    {#if change_password}
+
+    {#if change_password && delete_user==0}
         <div class="alert alert-success" role="alert">
             <div>
                 <b>변경 완료</b>
             </div>
         </div>
     {/if}
+    {#if delete_user}
+        <div class="alert alert-danger" role="alert">
+            <div>
+                <b>삭제 완료</b>
+            </div>
+        </div>
+    {/if}
+
     <div class="my-3 border-bottom pb-2"></div>
     <form method="post">
         <div class="mb-3">
@@ -73,4 +93,17 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
 
         <button type="submit" class="btn btn-primary" on:click="{CHANGE_PASSWORD}">변경</button>
     </form>
+
+    
+    <br>
+    <br>
+    <br>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="password"><h6>계정 삭제(삭제하면 되돌릴 수 없습니다.)</h6></label>
+        </div>
+        <button type="submit" class="btn btn-danger" on:click="{DELETE_USER}">삭제</button>
+    </form>
+
 </div>

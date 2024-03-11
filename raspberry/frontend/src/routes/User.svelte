@@ -141,6 +141,12 @@
                             ⚙️
                         </a>
                     </div>
+                {:else if $school_number==202400}
+                    <div class="align-items-right d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a use:link href="/profile/{page_school_number}/setting" class="btn btn-secondary btn-lg">
+                            ⚙️
+                        </a>
+                    </div>
                 {/if}
             </div>
 
