@@ -10,4 +10,4 @@ https://mathgame.bass9030.dev/docs
 https://python-programmer1512.github.io/MATH-GAME-WEBSITE.github.io/
 
 웹 게임
-https://python-programmer1512.github.io/KWG07.github.io/
+https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/
