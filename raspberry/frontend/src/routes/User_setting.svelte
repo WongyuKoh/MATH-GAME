@@ -40,7 +40,7 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     }
 
     function DELETE_USER(){
-        fastapi("change", "/api/user/school-number-delete/" + school_number, {}, (json) => {
+        fastapi("post", "/api/user/school-number-delete/" + school_number, {}, (json) => {
             delete_user=1
         },
         (json_error) => {
@@ -101,7 +101,7 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
 
     <form method="post">
         <div class="mb-3">
-            <label for="password"><h6>계정 삭제(삭제하면 되돌릴 수 없습니다.)</h6></label>
+            <label for="delete-uesr"><h6>계정 삭제(삭제하면 되돌릴 수 없습니다.)</h6></label>
         </div>
         <button type="submit" class="btn btn-danger" on:click="{DELETE_USER}">삭제</button>
     </form>
