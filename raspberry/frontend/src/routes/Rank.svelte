@@ -99,7 +99,7 @@
                 </div>
                 {#each rank_list as rank, i}
                     <div class="card-body pt-2 pb-1">
-                        <a href="/#/profile/{rank.user_id}/" style="text-decoration:none; color:black">
+                        <a href="/MATH-GAME-WEBSITE.github.io/#/profile/{rank.user_id}/" style="text-decoration:none; color:black">
                             <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
                                 <span class="mr-25 w-4 text-center" style="font-size: 27px">
                                     {#if page_data_cnt*(now_page-1)+i+1==1}
@@ -141,7 +141,7 @@
                     </div>
                     {#each class_rank_list as rank, i}
                         <div class="card-body pt-2 pb-1">
-                            <a href="/#/profile/{rank.user_id}/" style="text-decoration:none; color:black">
+                            <a href="/MATH-GAME-WEBSITE.github.io/#/profile/{rank.user_id}/" style="text-decoration:none; color:black">
                                 <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
                                     <span class="mr-25 w-4 text-center" style="font-size: 27px">
                                         {#if page_data_cnt*(now_page-1)+i+1==1}
