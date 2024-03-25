@@ -33,7 +33,7 @@
                             $username = ''
                             $school_number = '11111'
                             $is_login = false
-                        }}>로그아웃 </a>
+                        }}>로그아웃</a>
                         
                     </li>
                     <li class="nav-item">
