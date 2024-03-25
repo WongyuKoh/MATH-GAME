@@ -9,9 +9,11 @@ from argon2 import PasswordHasher
 pwd_context = PasswordHasher()
 
 def create_user(db: Session, user_create: UserCreate):
+
     db_user = User(school_number=user_create.school_number,
                     username=user_create.username,
                    password=pwd_context.hash(user_create.password1))
+    
     db.add(db_user)
     db.commit()
 
@@ -20,7 +22,7 @@ def get_existing_user(db: Session, user_create: UserCreate):
         (User.school_number == user_create.school_number)
     ).first()
     
-    
+  
 def get_user(db: Session, school_number: int):
 
     return db.query(User).filter(User.school_number == school_number).first()
@@ -90,4 +92,4 @@ def get_user_list(db: Session, school_class: int = 1): # skip : 데이터 시작
     #print(f"question_list : {_question_list}")
     question_list = _question_list.filter((User.school_number//100)%10==school_class).all()
     
-    return total, question_list  # (전체 건수, 페이징 적용된 질문 목록)
+    return total, question_list  # (전체 건수, 페이징 적용된 질문 목록)"""

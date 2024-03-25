@@ -4,7 +4,6 @@ from starlette import status
 
 from database import get_db
 from domain.user.user_router import get_current_user
-from models import Record
 from domain.record import record_schema, record_crud
 from domain.user import user_crud
 from domain.detail import detail_crud

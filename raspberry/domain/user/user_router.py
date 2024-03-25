@@ -60,7 +60,7 @@ def User_Exit(school_number: int, db: Session = Depends(get_db)):
 
 
 # 계정 삭제
-@router.post("/school-number-delete/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/school-number-delete/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def User_delete(school_number: int, db: Session = Depends(get_db)):
     user_crud.user_delete(db, school_number=school_number)
 
@@ -84,18 +84,21 @@ def user_change_school_number(school_number: int, new_school_number: str, db: Se
 
 # -----------------------------------
 
+
 # user 생성
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
     user = user_crud.get_existing_user(db, user_create=_user_create)
+    print(user)
     if user: # 409 Conflict
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="이미 존재하는 사용자입니다.")
     
+
     
     user_crud.create_user(db=db, user_create=_user_create)
     
-    
+
 @router.post("/login", response_model=user_schema.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
                            db: Session = Depends(get_db)):

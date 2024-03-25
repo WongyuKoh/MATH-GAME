@@ -1,0 +1,2 @@
+school_number,username,password
+20402,string,"$argon2id$v=19$m=65536,t=3,p=4$Gf1qdF377j/BJBNRH1MC1Q$dw7fXx+HSUaQMQ0zlWiNUYH/mL6yfUZJLOq4vQjp4uo"

@@ -1,8 +1,14 @@
-from models import Record,User
+from models import User, Record
 from sqlalchemy.orm import Session
-from datetime import datetime
+import datetime
 
 from domain.record.record_schema import RecordCreate
+
+
+def DateTimeNow():
+    nowDate=datetime.datetime.now()
+    return f"{str(nowDate.year)}-{str(nowDate.month)}-{str(nowDate.day)} {str(nowDate.hour)}:{str(nowDate.minute)}:{str(nowDate.second)}.{str(nowDate.microsecond)}"
+
 
 
 def get_record(db: Session, question_id: int):
@@ -20,7 +26,7 @@ def create_record(db: Session, user : User,
     db_record = Record(
                          correct_pb_cnt=record_create.correct_pb_cnt,
                            wrong_pb_cnt=record_create.wrong_pb_cnt,
-                           create_date=datetime.now(), score=record_create.score,
+                           create_date=datetime.datetime.now(), score=record_create.score,
                            main_category=record_create.main_category,
                            user=user,user_name=user.username)
     db.add(db_record)

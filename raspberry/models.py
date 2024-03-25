@@ -44,8 +44,6 @@ class Record(Base): # user 에 종속, record 복수
     user_id = Column(Integer, ForeignKey("user.school_number"), nullable=True)
     user = relationship("User",backref="records")
     
-    
-    
 class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     __tablename__ = "detail"
 

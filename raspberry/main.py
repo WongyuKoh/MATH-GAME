@@ -7,15 +7,14 @@ from domain.record import record_router
 from domain.user import user_router
 from domain.detail import detail_router
 from domain.rank import rank_router
-
+from domain.data_extract import de_router
 
 import uvicorn
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:8000",    # 또는 "http://localhost:5173"
-    ""
+    "http://localhost:8000"    # 또는 "http://localhost:5173"
 ]
 
 
@@ -31,7 +30,8 @@ app.include_router(detail_router.router)
 app.include_router(rank_router.router)
 app.include_router(user_router.router)
 app.include_router(record_router.router)
+app.include_router(de_router.router)
 
 if __name__ == "__main__":
     uvicorn.run(app)
-    #uvicorn.run(app, host="0.0.0.0") -> 배포시
+    #uvicorn.run(app, host="127.0.0.1")# -> 배포시

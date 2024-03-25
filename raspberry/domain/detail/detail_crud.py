@@ -1,6 +1,5 @@
 from models import Detail,Record
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from domain.detail.detail_schema import DetailCreate
 
