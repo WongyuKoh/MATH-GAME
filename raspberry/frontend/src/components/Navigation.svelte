@@ -39,7 +39,7 @@
                     <li class="nav-item">
 
 
-                        <a use:link class="nav-link" href="/profile/{$school_number}/">
+                        <a use:link class="nav-link" href="/#/profile/{$school_number}/">
                             {$username}({$school_number})
                         </a>
 
