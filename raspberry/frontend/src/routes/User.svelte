@@ -77,8 +77,8 @@
 
             fastapi("get", "/api/record/record-by-category-all/" + page_school_number+"/"+sub_category.category_name, {}, (json) => {
                 records[sub_category.category_name]=json
-                records[sub_category.category_name].record_list = records[sub_category.category_name].record_list.slice(0,slice_cnt)
                 Main_category[index].cnt=json.record_list.length
+                records[sub_category.category_name].record_list = records[sub_category.category_name].record_list.slice(0,slice_cnt)
                 gameplay_sum+=Main_category[index].cnt
                 if(Main_category[index].cnt==0){
                     rank[sub_category.category_name]="999+"
