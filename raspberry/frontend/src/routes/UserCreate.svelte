@@ -33,7 +33,10 @@
     <div class="main-body d-flex justify-content-center">
         <div class="col-md-10">
             <div class="card text-center">
-                <h3><b>학번은 2024학년도 2학년 학번으로 해주세요.</b></h3>
+                <h3>
+                    <b>학번은 2024학년도 2학년 학번으로 해주세요.</b>
+                    <b>비밀번호는 영어나 숫자로만 해주세요.(한글아나 특수기호를 사용할 시 비밀번호 설정이 제대로 되지 않을 수 있습니다.)</b>
+                </h3>
             </div>
         </div>
     </div>
