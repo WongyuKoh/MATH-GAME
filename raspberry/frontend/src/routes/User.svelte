@@ -88,32 +88,27 @@
                     rank[sub_category.category_name]="999+"
 
                 }else{
-                    var _params = {
-                        category : sub_category.category_name
-                    }
-                    fastapi("get", "/api/rank/list/" + 999999 + "/" + 1, _params, (json) => {
-            
-                        rank_list = json.rank_list
-                        idx = 0
-                        user_list = []
-                        rank[sub_category.category_name]="999+"
-                        while(idx<rank_list.length){
-                            val = rank_list[idx]
-                            if(val.user_id==page_school_number){
-                                rank[sub_category.category_name]=user_list.length+1
-                                break
-                            }
-                            if(user_list.indexOf(val.user_id)<0){
-                                user_list.push(val.user_id)
-                            }
-                            //rank_list.shift()
-                            idx++
+                    _user_rank(page_school_number,sub_category.category_name)
 
-                        }
-                    })
                 }
             })
         }
+    }
+    function _user_rank(school_number,category) {
+
+        let value=0
+        fastapi("get", "/api/rank/user-profile/" + school_number + "/" + category, {}, (json) => {
+            value=json.rank
+            if(value!=0){
+                if(value==-1){
+                    rank[category] = "999+"
+                }else{
+                    rank[category] = value
+                }
+            }else{
+                rank[category] = "999+"
+            }
+        })
     }
 
     function get_score() {

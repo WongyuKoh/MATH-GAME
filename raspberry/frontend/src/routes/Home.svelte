@@ -16,11 +16,8 @@
           school_class : _school_class
         }
         fastapi('get', '/api/record/record-class-cnt-all', params, (json) => {
-            console.log('!!!!!!!!!')
-            console.log(json)
             user_list = json.record_class
             $school_class = _school_class
-            console.log(user_list)
 
         })
 
