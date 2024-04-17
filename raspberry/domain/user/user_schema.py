@@ -53,3 +53,6 @@ class UserList(BaseModel):
 class UserExit(BaseModel):
     user_exit : bool = True
     
+class UserScore(BaseModel):
+    score : int = 0
+    

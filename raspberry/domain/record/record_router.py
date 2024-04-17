@@ -44,7 +44,7 @@ def user_record_category(db: Session = Depends(get_db),
     return {"record_list":rank_user_list}
 
 @router.get("/record-by-category-all/{school_number}/{category}", response_model=record_schema.RecordList)
-def user_record_category(db: Session = Depends(get_db),
+def user_record_category_all(db: Session = Depends(get_db),
                   school_number : int = 11111, category : str = ""):
 
     rank_user_list = record_crud.get_record_by_category_all(
@@ -52,3 +52,23 @@ def user_record_category(db: Session = Depends(get_db),
     
     
     return {"record_list":rank_user_list}
+
+@router.get("/record-cnt-all/{school_number}", response_model=record_schema.RecordCnt)
+def user_record_cnt_all(db: Session = Depends(get_db),
+                  school_number : int = 11111):
+
+    rank_cnt = record_crud.get_record_cnt_all(
+        db, school_number=school_number)
+    
+    
+    return {"record_cnt":rank_cnt}
+
+@router.get("/record-class-cnt-all", response_model=record_schema.RecordClassCnt)
+def user_record_class_cnt_all(db: Session = Depends(get_db),
+                  school_class : int = 1):
+
+    rank_list = record_crud.get_record_class_cnt_all(
+        db, school_class=school_class)
+    
+    
+    return {"record_class":rank_list}

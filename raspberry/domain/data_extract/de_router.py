@@ -24,8 +24,8 @@ router = APIRouter(
 @router.get("/user/all", response_model=de_schema.UserdbList)
 def user_db_list(db: Session = Depends(get_db)):
     List=de_crud.user_db_list(db)
-    print("!!!!")
-    print(List)
+    #print("!!!!")
+    #print(List)
     return {"dblist":List}
     
 @router.get("/record/all", response_model=de_schema.RecorddbList)

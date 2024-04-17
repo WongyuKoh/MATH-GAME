@@ -42,6 +42,63 @@ def user_delete(db:Session,school_number:int): # get 은 filter 없을때만 작
     db.delete(ID)
     db.commit()
     
+def user_score_updatebyinput(db:Session,school_number:int,category:str,score : int): # get 은 filter 없을때만 작동
+    ID=db.query(User).filter(User.school_number == school_number).first()
+    if category=="지수":
+        ID.exponential_score=max(score,ID.exponential_score)
+    elif category=="로그":
+        ID.log_score=max(score,ID.log_score)
+    elif category=="수열":
+        ID.sequence_score=max(score,ID.sequence_score)
+
+    db.commit()  
+    
+def user_score_updatebyrecord(db:Session,school_number:int): # get 은 filter 없을때만 작동
+    record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
+    ID=db.query(User).filter(User.school_number == school_number).first()
+    update_on=0
+    for data in record_list:
+        if data.user_id==school_number:
+            update_on=1
+            if data.main_category=="지수":
+                ID.exponential_score=max(data.score,ID.exponential_score)
+            elif data.main_category=="로그":
+                ID.log_score=max(data.score,ID.log_score)
+            elif data.main_category=="수열":
+                ID.sequence_score=max(data.score,ID.sequence_score)
+        else:
+            if update_on:
+                break
+        db.commit() 
+
+def user_score_update_all(db:Session): # get 은 filter 없을때만 작동
+    record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
+    last_school_number=-1
+    ID=0
+    for data in record_list:
+        if last_school_number!=data.user_id:
+            last_school_number=data.user_id
+            ID=db.query(User).filter(User.school_number == last_school_number).first()
+        if data.main_category=="지수":
+            ID.exponential_score=max(data.score,ID.exponential_score)
+        elif data.main_category=="로그":
+            ID.log_score=max(data.score,ID.log_score)
+        elif data.main_category=="수열":
+            ID.sequence_score=max(data.score,ID.sequence_score)
+
+        db.commit()  
+
+def user_score(db:Session,school_number:int,category:str): # get 은 filter 없을때만 작동
+    ID=db.query(User).filter(User.school_number == school_number).first()
+    
+    if category=="지수":
+        return ID.exponential_score
+    elif category=="로그":
+        return ID.log_score
+    elif category=="수열":
+        return ID.sequence_score
+    
+    
 def user_password_change(db:Session,school_number:int,new_password:str):
 
     ID=db.query(User).filter(User.school_number == school_number).first()
@@ -53,6 +110,15 @@ def user_username_change(db:Session,school_number:int,new_username:str):
     ID=db.query(User).filter(User.school_number == school_number).first()
     ID.username=new_username
     db.commit()
+    async def change_school_number(new_username,school_number):
+        change_list=db.query(Record).filter(Record.user_id==school_number).all()
+        for data in change_list:
+            data.user_name = new_username
+            
+        db.commit()
+        
+    asyncio.run(change_school_number(school_number=school_number,new_username=new_username))
+    
     
 def user_school_number_change(db:Session,school_number:int,new_school_number:str):
     

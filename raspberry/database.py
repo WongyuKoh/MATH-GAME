@@ -15,8 +15,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine,MetaData
 import json
 import os
-
-URL_DATABASE = 'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame'
+#'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame'
+URL_DATABASE = 'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame_rev2'#'mysql+pymysql://root:kohwongyu@localhost:3306/MathGame'
 engine = create_engine(URL_DATABASE)
 
 

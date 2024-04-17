@@ -20,3 +20,10 @@ https://deb.nodesource.com/setup_21.x
 2-2. sudo apt dist-upgrade
 2-3. 
 
+
+https://expertpro.tistory.com/9
+
+
+3. 아나콘다 설치
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+

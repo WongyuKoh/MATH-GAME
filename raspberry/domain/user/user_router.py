@@ -98,6 +98,36 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
     
     user_crud.create_user(db=db, user_create=_user_create)
     
+@router.post("/score-updatebyinput", status_code=status.HTTP_204_NO_CONTENT)
+def user_list(db: Session = Depends(get_db),
+                  category : str = "", school_number : int = 0, score : int = 0):
+    
+    user_crud.user_score_updatebyinput(
+        db, school_number=school_number,category=category,score = score)
+    
+@router.post("/score-updatebyrecord", status_code=status.HTTP_204_NO_CONTENT)
+def user_list(db: Session = Depends(get_db),
+                   school_number : int = 0):
+    
+    user_crud.user_score_updatebyrecord(
+        db, school_number=school_number)
+    
+@router.post("/score-update-all", status_code=status.HTTP_204_NO_CONTENT)
+def user_list(db: Session = Depends(get_db)):
+    
+    user_crud.user_score_update_all(db)
+    
+@router.get("/score", response_model=user_schema.UserScore)
+def user_score(db: Session = Depends(get_db),
+                  category : str = "", school_number : int = 0):
+    
+    score = user_crud.user_score(
+        db, school_number=school_number,category=category)
+    
+    return {"score":score}
+    
+        
+
 
 @router.post("/login", response_model=user_schema.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
@@ -155,3 +185,4 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         if user is None:
             raise credentials_exception
         return user
+    

@@ -2,9 +2,9 @@
     import fastapi from "../lib/api"
     import { link } from 'svelte-spa-router'
     import { school_class,is_login, access_token, username, school_number  } from "../lib/store"
+    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
-
     let user_list = []
     const total_page = 9
     /* 
@@ -12,12 +12,15 @@
     */
     /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
     function get_user_list(_school_class) {
-        let params = {
-            school_class: _school_class,
+        let params={
+          school_class : _school_class
         }
-        fastapi('get', '/api/user/list', params, (json) => {
-            user_list = json.user_list
+        fastapi('get', '/api/record/record-class-cnt-all', params, (json) => {
+            console.log('!!!!!!!!!')
+            console.log(json)
+            user_list = json.record_class
             $school_class = _school_class
+            console.log(user_list)
 
         })
 
@@ -64,7 +67,7 @@
           <td>
               <a use:link href="/profile/{Number(user.school_number)}">{user.username}</a>
           </td>
-          <td>{Object.keys(user.records).length}</td>
+          <td>{user.record_cnt}</td>
           <!--<td>{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</td>-->
       </tr>
       {/each}

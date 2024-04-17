@@ -30,3 +30,10 @@ class RecordCreate(BaseModel):
     
 class RecordList(BaseModel):
     record_list : list[Record] = []
+    
+    
+class RecordCnt(BaseModel):
+    record_cnt : int = 0
+    
+class RecordClassCnt(BaseModel):
+    record_class : list = []

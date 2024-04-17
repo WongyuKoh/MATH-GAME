@@ -1,12 +1,17 @@
 from pydantic import BaseModel, validator, EmailStr
 
 
+
+
 class Rank(BaseModel):
-    id : int = 0
-    user_id : int = 11111
-    user_name : str = ""
+    school_number : int = 11111
+    username : str = ""
     score : int = 0
     
+    log_score : int = 0
+    exponential_score : int = 0
+    sequence_score : int = 0
+
     
     class Config:
         from_attributes = True

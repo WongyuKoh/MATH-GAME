@@ -23,10 +23,14 @@ from database import Base
 class User(Base):
     __tablename__ = "user"
 
-    
-    school_number = Column(Integer, primary_key=True) # 학번 , 로그인 시 사용
+    id = Column(Integer, nullable=False, primary_key=True)
+    school_number = Column(Integer, nullable=False, primary_key=False) # 학번 , 로그인 시 사용
     username = Column(String, nullable=False) # 실제 이름
     password = Column(String, nullable=False)
+    
+    log_score = Column(Integer,nullable=False) # log
+    exponential_score = Column(Integer,nullable=False) # 지수
+    sequence_score = Column(Integer,nullable=False) # 수열
     
 class Record(Base): # user 에 종속, record 복수
     __tablename__ = "record"
@@ -34,15 +38,15 @@ class Record(Base): # user 에 종속, record 복수
     main_category=Column(String,nullable=False)
 
     id = Column(Integer, primary_key=True)
-    score = Column(Integer,nullable=False, primary_key=False)
-    correct_pb_cnt = Column(Integer, primary_key=False)
-    wrong_pb_cnt = Column(Integer, primary_key=False)
+    score = Column(Integer,nullable=False)
+    correct_pb_cnt = Column(Integer)
+    wrong_pb_cnt = Column(Integer)
     
     
     create_date = Column(DateTime, nullable=False)
-    user_name = Column(String,nullable=False,primary_key=False)
-    user_id = Column(Integer, ForeignKey("user.school_number"), nullable=True)
-    user = relationship("User",backref="records")
+    user_name = Column(String,nullable=False)
+    user_id = Column(Integer, nullable=True)
+    # user = relationship("User",backref="records")
     
 class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     __tablename__ = "detail"

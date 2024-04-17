@@ -6,11 +6,17 @@ import { push } from 'svelte-spa-router'
 const fastapi = (operation, url, params, success_callback, failure_callback) => {
     let method = operation
     let content_type = 'application/json'
+    var save_idx = -1
     let body = JSON.stringify(params) /*{"content":"입력"}*/
     if(operation === 'login') {
         method = 'post'
         content_type = 'application/x-www-form-urlencoded'
         body = qs.stringify(params)
+    }
+    if(method=='get-home'){
+        save_idx = params["save_idx"]
+        params = {}
+        method='get'
     }
 
 
@@ -57,9 +63,15 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
 
                     if(response.status >= 200 && response.status < 300) {  // 200 ~ 299
                         if(success_callback) {                 
+                            if(save_idx!=-1){
+                                //console.log('------------------------',save_idx)
+                                success_callback(json,save_idx)
 
-                            success_callback(json)
+                            }else{
+                                success_callback(json)
 
+                            }
+                            
                         
                         }
                         return
