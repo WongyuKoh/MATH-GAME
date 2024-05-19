@@ -38,3 +38,8 @@ def detail_db_list(db: Session = Depends(get_db)):
     List=de_crud.detail_db_list(db)
     return {"dblist":List}
     
+@router.get("/detail/cnt", response_model=de_schema.DetaildbList)
+def detail_db_list(offset : int = 0, limit : int = 0, db: Session = Depends(get_db)):
+    List=de_crud.detail_db_list_cnt(offset,limit,db)
+    return {"dblist":List}
+    

@@ -12,7 +12,10 @@ def create_user(db: Session, user_create: UserCreate):
 
     db_user = User(school_number=user_create.school_number,
                     username=user_create.username,
-                   password=pwd_context.hash(user_create.password1))
+                   password=pwd_context.hash(user_create.password1),
+                   log_score=0,
+                   exponential_score=0,
+                   sequence_score=0)
     
     db.add(db_user)
     db.commit()

@@ -14,3 +14,7 @@ def user_db_list(db : Session):
 
 def record_db_list(db : Session):
     return db.query(Record).all()
+
+
+def detail_db_list_cnt(offset : int,limit : int, db : Session):
+    return db.query(Detail).offset(offset).limit(limit).all()

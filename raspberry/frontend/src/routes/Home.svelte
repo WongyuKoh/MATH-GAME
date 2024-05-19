@@ -1,4 +1,4 @@
-<script>/* script 부분은 처음에 한번만 실행함, 대신 $: 는 계속 실행함*/
+<script>
     import fastapi from "../lib/api"
     import { link } from 'svelte-spa-router'
     import { school_class,is_login, access_token, username, school_number  } from "../lib/store"
@@ -92,6 +92,6 @@
   </ul>
   <!-- 페이징처리 끝 -->
 
-
+  
 </div>
   

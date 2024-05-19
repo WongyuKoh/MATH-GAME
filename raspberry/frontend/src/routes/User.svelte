@@ -46,7 +46,7 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
-    import { is_login,school_number } from "../lib/store"
+    import { school_number } from "../lib/store"
     import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     import { slide } from "svelte/transition";
@@ -59,10 +59,6 @@
     let username = ""
     let rank = {}
     let slice_cnt=3
-    var user_list = []
-    let rank_list = []
-    var idx = 0
-    var val = 0
     let Main_category = []
     for(const category_name of MAIN_CATEGORY){
         Main_category.push({category_name:category_name,cnt:0})
@@ -88,48 +84,27 @@
                     rank[sub_category.category_name]="999+"
 
                 }else{
-                    _user_rank(page_school_number,sub_category.category_name)
+                    User_Rank(page_school_number,sub_category.category_name)
 
                 }
             })
         }
     }
-    function _user_rank(school_number,category) {
+    function User_Rank(school_number,category) {
 
         let value=0
         fastapi("get", "/api/rank/user-profile/" + school_number + "/" + category, {}, (json) => {
             value=json.rank
-            if(value!=0){
-                if(value==-1){
-                    rank[category] = "999+"
-                }else{
-                    rank[category] = value
-                }
-            }else{
+            //console.log(value,json)
+            if(value==0 || value==-1){
                 rank[category] = "999+"
-            }
-        })
-    }
-
-    function get_score() {
-        fastapi("get", "/api/user/username/" + page_school_number, {}, (json) => {
-            username=json.username
-        })
-        //console.log("MAIN_category")
-        //console.log(Main_category)
-        for(const [index, sub_category] of Main_category.entries()){
-            //console.log(Main_category[index].cnt,sub_category)
-            //console.log(sub_category.cnt,records,records[sub_category.category_name],records[sub_category.category_name].record_list.length)
-            if(sub_category.cnt==0){
-                rank[sub_category.category_name]="999+"
-
             }else{
-                fastapi("get", "/api/rank/user-profile/" + page_school_number, {}, (json) => {
-                    rank[sub_category.category_name] = json.rank
-                })
+                rank[category] = value
             }
-        }
+            //console.log('!!',rank[category],category)
+        })
     }
+
 
 
     get_record_all()

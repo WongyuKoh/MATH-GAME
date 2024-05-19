@@ -92,6 +92,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <div class="container">
     <div class="row">
+
         <div class="col-sm-5 mr-0">
             <div class="card ccard radius-t-0 h-100">
                 <div class="position-tl w-102 border-t-3 brc-primary-tp3 ml-n1px mt-n1px"></div>
@@ -104,36 +105,39 @@
                     {#if i<10}
                     <div class="card-body pt-2 pb-1">
                         <a href="/MATH-GAME-WEBSITE.github.io/#/profile/{rank.school_number}/" style="text-decoration:none; color:black">
-                            <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                                <span class="mr-25 w-4 text-center" style="font-size: 27px">
-                                    {#if page_data_cnt*(now_page-1)+i+1==1}
-                                        {emojis["1st"]}
-                                    {:else if page_data_cnt*(now_page-1)+i+1==2}
-                                        {emojis["2nd"]}
-                                    {:else if page_data_cnt*(now_page-1)+i+1==3}
-                                        {emojis["3rd"]}
-                                    {/if}
-                                </span>
-                                <span class="mr-25 w-5 text-center">
-                                    {page_data_cnt*(now_page-1)+i+1}
-                                </span>
-                                <span class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                    <img alt="Alexa's avatar" src="https://i.ibb.co/CwwJsL4/init-profile.png" class="h-4 w-4" />
-                                </span>
-                                <span class="mr-25 ml-auto text-dark-l2 text-nowrap">
-                                    {rank.username}({rank.school_number})
-                                </span>
-                                <nav>
-                                    <span class="mr-25 text-dark-l2 text-nowrap ">
-                                        {#if $rank_category_page=='로그'}
-                                            {rank.log_score}점
-                                        {:else if $rank_category_page=='수열'}
-                                            {rank.sequence_score}점
-                                        {:else if $rank_category_page=='지수'}
-                                            {rank.exponential_score}점
+                            <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style jc_sb">
+                                
+                                <div class="medal-rank-blank">
+                                    <span class="mr-25 w-4 text-center" style="font-size: 27px">
+                                        {#if page_data_cnt*(now_page-1)+i+1==1}
+                                            {emojis["1st"]}
+                                        {:else if page_data_cnt*(now_page-1)+i+1==2}
+                                            {emojis["2nd"]}
+                                        {:else if page_data_cnt*(now_page-1)+i+1==3}
+                                            {emojis["3rd"]}
                                         {/if}
                                     </span>
-                                </nav>
+                                    <span class="mr-25 w-5 text-center">
+                                        {page_data_cnt*(now_page-1)+i+1}
+                                    </span>
+                                    <span class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
+                                        <img alt="Alexa's avatar" src="https://i.ibb.co/CwwJsL4/init-profile.png" class="h-4 w-4" />
+                                    </span>
+                                    <span class="mr-25 ml-auto text-dark-l2 text-nowrap">
+                                        {rank.username}({rank.school_number})
+                                    </span>
+                                </div>
+
+                                <span class="mr-25 text-dark-l2 text-nowrap ">
+                                    {#if $rank_category_page=='로그'}
+                                        {rank.log_score}점
+                                    {:else if $rank_category_page=='수열'}
+                                        {rank.sequence_score}점
+                                    {:else if $rank_category_page=='지수'}
+                                        {rank.exponential_score}점
+                                    {/if}
+                                </span>
+
                             </div>
                         </a>
                     </div>
@@ -141,6 +145,8 @@
                 {/each}
             </div>
         </div>
+
+
         {#if $is_login}
             <div class="col-sm-5 mr-0">
                 <div class="card ccard radius-t-0 h-100">
@@ -153,36 +159,38 @@
                     {#each class_rank_list as rank, i}
                         <div class="card-body pt-2 pb-1">
                             <a href="/MATH-GAME-WEBSITE.github.io/#/profile/{rank.school_number}/" style="text-decoration:none; color:black">
-                                <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                                    <span class="mr-25 w-4 text-center" style="font-size: 27px">
-                                        {#if page_data_cnt*(now_page-1)+i+1==1}
-                                            {emojis["1st"]}
-                                        {:else if page_data_cnt*(now_page-1)+i+1==2}
-                                            {emojis["2nd"]}
-                                        {:else if page_data_cnt*(now_page-1)+i+1==3}
-                                            {emojis["3rd"]}
-                                        {/if}
-                                    </span>
-                                    <span class="mr-40 w-5 text-center">
-                                        {page_data_cnt*(now_page-1)+i+1}({user_rank[rank.school_number]})
-                                    </span>
-                                    <span class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                        <img alt="Alexa's avatar" src="https://i.ibb.co/CwwJsL4/init-profile.png" class="h-4 w-4" />
-                                    </span>
-                                    <span class="mr-25 ml-auto text-dark-l2 text-nowrap">
-                                        {rank.username}({rank.school_number})
-                                    </span>
-                                    <nav>
-                                        <span class="mr-25 text-dark-l2 text-nowrap ">
-                                            {#if $rank_category_page=='로그'}
-                                                {rank.log_score}점
-                                            {:else if $rank_category_page=='수열'}
-                                                {rank.sequence_score}점
-                                            {:else if $rank_category_page=='지수'}
-                                                {rank.exponential_score}점
+                                <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style jc_sb">
+
+                                    <div class="medal-rank-blank">
+                                        <span class="mr-25 w-4 text-center" style="font-size: 27px">
+                                            {#if page_data_cnt*(now_page-1)+i+1==1}
+                                                {emojis["1st"]}
+                                            {:else if page_data_cnt*(now_page-1)+i+1==2}
+                                                {emojis["2nd"]}
+                                            {:else if page_data_cnt*(now_page-1)+i+1==3}
+                                                {emojis["3rd"]}
                                             {/if}
                                         </span>
-                                    </nav>
+                                        <span class="mr-40 w-5 text-center">
+                                            {page_data_cnt*(now_page-1)+i+1}({user_rank[rank.school_number]})
+                                        </span>
+                                        <span class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
+                                            <img alt="Alexa's avatar" src="https://i.ibb.co/CwwJsL4/init-profile.png" class="h-4 w-4" />
+                                        </span>
+                                        <span class="mr-25 ml-auto text-dark-l2 text-nowrap">
+                                            {rank.username}({rank.school_number})
+                                        </span>
+                                    </div>
+                                    
+                                    <span class="mr-25 text-dark-l2 text-nowrap ">
+                                        {#if $rank_category_page=='로그'}
+                                            {rank.log_score}점
+                                        {:else if $rank_category_page=='수열'}
+                                            {rank.sequence_score}점
+                                        {:else if $rank_category_page=='지수'}
+                                            {rank.exponential_score}점
+                                        {/if}
+                                    </span>
                                 </div>
                             </a>
                         </div>

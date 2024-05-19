@@ -32,6 +32,16 @@ def create_record(db: Session, user : User,
     db.add(db_record)
     db.commit()
     
+    ID=db.query(User).filter(User.school_number == user.school_number).first()
+    if record_create.main_category=="지수":
+        ID.exponential_score=max(record_create.score,ID.exponential_score)
+    elif record_create.main_category=="로그":
+        ID.log_score=max(record_create.score,ID.log_score)
+    elif record_create.main_category=="수열":
+        ID.sequence_score=max(record_create.score,ID.sequence_score)
+
+    db.commit()  
+    
     return db_record
 
 def get_record_by_category(db: Session, school_number : int, category : str,cnt : int):

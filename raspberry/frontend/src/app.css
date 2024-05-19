@@ -7,6 +7,87 @@ body{
 .main-body {
     padding: 15px;
 }
+
+
+.navcenter {
+    margin:0 auto; /* 0 : y, auto : x*/
+    padding : 0 16px;
+    width: 100%;
+
+}
+@media(min-width : 600px){ /* 600보다 크면 실행*/
+    .navcenter {
+        margin:0 auto; /* 0 : y, auto : x*/
+        padding : 0 10px;
+        width: 90%;
+    
+    }
+}
+@media(min-width : 1300px){ /* 1300보다 크면 실행*/
+    .navcenter {
+        margin:0 auto; /* 0 : y, auto : x*/
+        padding : 0 10px;
+        width: 80%;
+    
+    }
+    
+}
+@media(min-width : 1400px){ /* 1300보다 크면 실행*/
+    .navcenter {
+        margin:0 auto; /* 0 : y, auto : x*/
+        padding : 0 10px;
+        width: 90%;
+    
+    }
+    
+}
+@media(min-width : 1600px){ /* 1300보다 크면 실행*/
+    .navcenter {
+        margin:0 auto; /* 0 : y, auto : x*/
+        padding : 0 10px;
+        width: 80%;
+    
+    }
+    
+}
+
+
+.medal-rank-blank{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.jc_sb {
+    position: relative;
+    justify-content: space-between;
+}
+
+
+.navsidesort {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+}
+
+.container-fluid-flex{
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+
+}
+
+.navunderbar-flex-start{
+    position: relative;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
 .card {
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
 }
@@ -49,10 +130,6 @@ body{
 .text-align-right{
     text-align:right;
 }
-
-nav {
-    margin-left: auto;
-  }
 
 
 .bg-gray-300 {
@@ -165,4 +242,3 @@ nav {
 .text-95 {
     font-size: .95em!important;
 }
-
