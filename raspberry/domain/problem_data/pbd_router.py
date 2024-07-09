@@ -18,39 +18,57 @@ def problem_create(_problem_create: pbd_schema.ProblemCreate,
     
     pbd_crud.create_problem(db=db,problem_create=_problem_create)
 
-        
-@router.get("/list/{category_number}", response_model=pbd_schema.ProblemList)
-def problem_list(db: Session = Depends(get_db),
-                  category_number : int = 0):
 
-    problem_list = pbd_crud.get_problem(
-        db, category_number=category_number)
+@router.post("/problem-update", status_code=status.HTTP_204_NO_CONTENT)
+def problem_create(db: Session = Depends(get_db)):
     
-    return problem_list
 
-@router.get("/titlename2number/{title_name}", response_model=pbd_schema.ProblemTitle)
-def problem_list(db: Session = Depends(get_db),
-                  title_name : str = ""):
+    pbd_crud.problem_update(db=db)
 
-    title_number = pbd_crud.Title_name2number(
-        db, title_name=title_name)
+
+
+@router.post("/problem-trytime-update", status_code=status.HTTP_204_NO_CONTENT)
+def problem_create(db: Session = Depends(get_db)):
     
-    
-    return {"title":title_name,"title_number":title_number}
+    pbd_crud.problem_trytime_update(db=db)
 
 
-# ---- title -----
 
-@router.post("/title/create", status_code=status.HTTP_204_NO_CONTENT)
-def title_create(_title_create: pbd_schema.ProblemTitleCreate,
-                  db: Session = Depends(get_db)):
-    
-    pbd_crud.create_title(db=db,problem_create=_title_create)
 
         
-@router.get("/title/list", response_model=pbd_schema.Problem_TitleList)
-def title_list(db: Session = Depends(get_db)):
+        
+# @router.get("/list/{category_number}", response_model=pbd_schema.ProblemList)
+# def problem_list(db: Session = Depends(get_db),
+#                   category_number : int = 0):
 
-    title_list = pbd_crud.get_title(db)
+#     problem_list = pbd_crud.get_problem(
+#         db, category_number=category_number)
     
-    return title_list
+#     return problem_list
+
+# @router.get("/titlename2number/{title_name}", response_model=pbd_schema.ProblemTitle)
+# def problem_list(db: Session = Depends(get_db),
+#                   title_name : str = ""):
+
+#     title_number = pbd_crud.Title_name2number(
+#         db, title_name=title_name)
+    
+    
+#     return {"title":title_name,"title_number":title_number}
+
+
+# # ---- title -----
+
+# @router.post("/title/create", status_code=status.HTTP_204_NO_CONTENT)
+# def title_create(_title_create: pbd_schema.ProblemTitleCreate,
+#                   db: Session = Depends(get_db)):
+    
+#     pbd_crud.create_title(db=db,problem_create=_title_create)
+
+        
+# @router.get("/title/list", response_model=pbd_schema.Problem_TitleList)
+# def title_list(db: Session = Depends(get_db)):
+
+#     title_list = pbd_crud.get_title(db)
+    
+#     return title_list

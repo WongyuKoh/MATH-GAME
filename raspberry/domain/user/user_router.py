@@ -28,9 +28,12 @@ router = APIRouter(
 
 @router.get("/list", response_model=user_schema.UserList)
 def user_list(db: Session = Depends(get_db),
-                  school_class : int = 1):
+                  school_class : int = 1,school_name : str = ""):
+    
+    school_id = exiting_school(school_name)
+    
     total, _user_list = user_crud.get_user_list(
-        db, school_class=school_class)
+        db, school_class=school_class,school_id=school_id)
     
     #print(f"_question_list : {_user_list.first().school_number}")
     
@@ -41,62 +44,94 @@ def user_list(db: Session = Depends(get_db),
     
 # user 의 세부 정보를 알려주는 창
 @router.get("/detail/{school_number}", response_model=user_schema.User)
-def user_detail(school_number: int, db: Session = Depends(get_db)):
-    user = user_crud.get_user(db, school_number=school_number)
+def user_detail(school_number: int, school_name : str = "", db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    
+    user = user_crud.get_user(db, school_number=school_number,school_id=school_id)
     return user
 
-# 학번 입력시 유저 이름 알려주기
+# 학교 및 학번 입력시 유저 이름 알려주기
 @router.get("/username/{school_number}", response_model=user_schema.UserName)
-def user_detail(school_number: int, db: Session = Depends(get_db)):
-    user = user_crud.get_username(db, school_number=school_number)
+def user_detail(school_number: int, school_name : str,db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    
+    user = user_crud.get_username(db, school_number=school_number,school_id=school_id)
     return {"school_number":user.school_number,"username":user.username}
 
 # --------------------------------
 # 존재하는 학번인지 확인
 @router.get("/user-exist/{school_number}", response_model=user_schema.UserExit)
-def User_Exit(school_number: int, db: Session = Depends(get_db)):
-    user_exit = user_crud.get_user_exit(db, school_number=school_number)
+def User_Exit(school_number: int, school_name : str, db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    
+    user_exit = user_crud.get_user_exit(db, school_number=school_number,school_id=school_id)
     return {"user_exit":user_exit} 
 
 
 # 계정 삭제
 @router.delete("/school-number-delete/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
-def User_delete(school_number: int, db: Session = Depends(get_db)):
-    user_crud.user_delete(db, school_number=school_number)
+def User_delete(school_number: int, school_name : str, db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    
+    user_crud.user_delete(db, school_number=school_number,school_id=school_id)
 
 
 # 비밀번호 변경
 @router.post("/password-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
-def user_change_password(school_number: int, new_password: str, db: Session = Depends(get_db)):
-    user_crud.user_password_change(db, school_number=school_number,new_password=new_password)
+def user_change_password(school_number: int, school_name : str, new_password: str, db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    user_crud.user_password_change(db, school_number=school_number,new_password=new_password,school_id=school_id)
 
-# 이름 변경 (아직)
+# 이름 변경
 @router.post("/username-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
-def user_change_username(school_number: int, new_username: str, db: Session = Depends(get_db)):
-    user_crud.user_username_change(db, school_number=school_number,new_username=new_username)
+def user_change_username(school_number: int, school_name : str, new_username: str, db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    user_crud.user_username_change(db, school_number=school_number,new_username=new_username,school_id=school_id)
 
-# 학번 변경 (아직)
+# 학번 변경
 @router.post("/school-number-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
-def user_change_school_number(school_number: int, new_school_number: str, db: Session = Depends(get_db)):
-    val=user_crud.user_school_number_change(db, school_number=school_number,new_school_number=new_school_number)
+def user_change_school_number(school_number: int, school_name : str, new_school_number: str, db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(school_name)
+    val=user_crud.user_school_number_change(db, school_number=school_number,new_school_number=new_school_number,school_id=school_id)
     if not val:
         raise HTTPException(status_code=404, detail="user not found")
 
 # -----------------------------------
 
+# 학교 체크
+def exiting_school(db,school_name):
+    school_id = user_crud.exist_school(db,school_name)
+    
+    if school_id==0:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="학교가 존재하지 않습니다.")
+    
+    return school_id
 
 # user 생성
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
-    user = user_crud.get_existing_user(db, user_create=_user_create)
-    print(user)
+    
+    school_id = exiting_school(_user_create.school_name)
+    
+        
+    
+    user = user_crud.get_existing_user(db, user_create=_user_create,school_id = school_id)
+    #print(user)
     if user: # 409 Conflict
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="이미 존재하는 사용자입니다.")
     
 
+
     
-    user_crud.create_user(db=db, user_create=_user_create)
+    user_crud.create_user(db=db, user_create=_user_create,school_id = school_id)
     
 @router.post("/score-updatebyinput", status_code=status.HTTP_204_NO_CONTENT)
 def user_list(db: Session = Depends(get_db),
@@ -127,7 +162,7 @@ def user_score(db: Session = Depends(get_db),
     return {"score":score}
     
         
-
+# 여기부터 아직 안함
 
 @router.post("/login", response_model=user_schema.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),

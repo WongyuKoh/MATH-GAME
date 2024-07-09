@@ -30,3 +30,16 @@ def record_detail_list(db: Session = Depends(get_db),
     
     return _user_list
     
+
+
+
+@router.post("/detail-trytime-update")
+def detail_trytime_update(db: Session = Depends(get_db)):
+    _user_list = detail_crud.detail_trytime_update(db)
+    
+    #print(f"_question_list : {_user_list.first().school_number}")
+    
+    return _user_list
+    
+
+

@@ -13,6 +13,8 @@ class Record(BaseModel):
     score : int = 0
     user_name : str = ""
     create_date: datetime.datetime
+    trytime : int = 0
+    school_id : int = 0
     detail : list[Detail] = []
     
     
@@ -24,6 +26,7 @@ class RecordCreate(BaseModel):
     correct_pb_cnt : int = 0
     wrong_pb_cnt : int = 0
     score : int = 0
+    trytime : int = 0
     detail : list[Detail] = [Detail()]
     
 

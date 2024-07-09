@@ -2,11 +2,14 @@ from pydantic import BaseModel, validator, EmailStr
 from domain.record.record_schema import Record
 
 
-# api 입 
+# api 입력
 
 class UserCreate(BaseModel):
+    
+    school_name : int # 학교 이름
     school_number: int # 학번
     username : str # 실명
+    
     password1: str
     password2: str
 
@@ -25,15 +28,24 @@ class UserCreate(BaseModel):
             raise ValueError('비밀번호가 일치하지 않습니다')
         return v
     
-class Token(BaseModel):
+
+# ----------------------------------------------- #   
+# id : 학교 영어명_학번
+# 초기 password : id랑 동일
+# 
+# ----------------------------------------------- # 
+    
+class Token(BaseModel): # 로그인 시스템 변경
     access_token: str
     token_type: str
     username: str # 학번
     school_number : str
+    school_name : int
     
 class User(BaseModel):
     school_number : int
     username: str
+    school_id : int
     records : list[Record] =[]
     
     class Config:

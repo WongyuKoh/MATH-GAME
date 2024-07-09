@@ -53,11 +53,11 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     <form method="post">
         <div class="mb-3">
             <label for="username">사용자 이름</label>
-            <input type="text" class="form-control" id="username" bind:value="{login_username}">
+            <input type="text" class="form-control" id="username" bind:value="{login_username}" placeholder="enter your name">
         </div>
         <div class="mb-3">
             <label for="password">비밀번호</label>
-            <input type="password" class="form-control" id="password" bind:value="{login_password}">
+            <input type="password" class="form-control" id="password" bind:value="{login_password}" placeholder="enter your password">
         </div>
         <button type="submit" class="btn btn-primary" on:click="{login}">로그인</button>
     </form>

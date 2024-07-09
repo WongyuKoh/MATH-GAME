@@ -7,7 +7,14 @@
 <div class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
     <nav class="navcenter">
         <div class="container-fluid navsidesort">
-            <a use:link class="navbar-brand" href="/" on:click="{() => {$school_class = 0}}">Math Game</a>
+    
+            <!--alt 는 이미지가 안뜰때 대체 단어-->
+            <!--<img src="./WhackAMole_icon.png" alt="" class="image" width="45">-->
+            <a use:link class="navbar-brand" href="/" on:click="{() => {$school_class = 0}}">
+                <b>MathGame</b>
+
+                    
+            </a>
             <button
                 class="navbar-toggler"
                 type="button"

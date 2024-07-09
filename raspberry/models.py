@@ -31,6 +31,7 @@ class User(Base):
     log_score = Column(Integer,nullable=False) # log
     exponential_score = Column(Integer,nullable=False) # 지수
     sequence_score = Column(Integer,nullable=False) # 수열
+    school_id = Column(Integer,nullable=False) # 학교 번호
     
 class Record(Base): # user 에 종속, record 복수
     __tablename__ = "record"
@@ -46,6 +47,8 @@ class Record(Base): # user 에 종속, record 복수
     create_date = Column(DateTime, nullable=False)
     user_name = Column(String,nullable=False)
     user_id = Column(Integer, nullable=True)
+    trytime = Column(Integer,nullable=False)
+    school_id = Column(Integer,nullable=False)
     # user = relationship("User",backref="records")
     
 class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
@@ -56,7 +59,27 @@ class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     problem = Column(String, nullable=False) # 문제 
     problem_answer = Column(String, nullable=False) # 문제 답
     user_answers = Column(String, nullable=False) # 문제에 대한 유저의 답(응답,응답,... 형태의 문자열) 
-    
+    trytime = Column(Integer,nullable=False)
     
     record_id = Column(Integer, ForeignKey("record.id"), nullable=True)
     record = relationship("Record",backref="detail")
+    
+class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가짐
+    __tablename__ = "problem"
+
+    id = Column(Integer, primary_key=True)
+    problem = Column(String, nullable=False) # 문제 
+    problem_list = Column(String, nullable=False) # 문제 숫자만 뽑은거
+    category = Column(String,nullable=False)
+    trytime = Column(Integer, primary_key=False)
+    trystudent = Column(Integer, primary_key=False)
+    problem_level = Column(Integer, primary_key=False)
+    
+    
+class School(Base):
+    __tablename__ = "school_id"
+    
+    school_id = Column(Integer,primary_key=True)
+    school_name = Column(String, nullable=False)
+    
+    

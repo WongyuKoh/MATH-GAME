@@ -92,6 +92,245 @@ body{
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
 }
 
+.mainscreen {
+    position: relative;
+    display: grid;
+	grid-template-areas:
+		"a  header b"
+		"main   main   main";
+
+    grid-template-columns: 1fr 5fr 1fr;
+    max-width: 1000px;
+    min-width: 70vw;
+    row-gap: 30px;
+
+}
+
+
+.button-serach{
+    position: relative;
+    display: block;
+}
+.SCREEN{ 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; /* or stretch*/ 
+    overflow: hidden; 
+}
+
+
+
+/* .unlogin-screen {
+    grid-area: main;
+    position: relative;
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    min-width: 60vw;
+} */
+.unlogin-screen {
+    grid-area: main;
+    position: relative;
+    justify-self: center;
+    display: flex;
+    /* grid-template-columns: 2fr 1fr; */
+    min-width: 60vw;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+
+.school-search {
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 2;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-style: solid;
+    background-color : rgb(255, 255, 255);
+    border-radius: 30px;
+    border-width: 5px;
+    border-color: rgb(110, 144, 244);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+
+.mainpage_image{
+    position: relative;
+    border-style: solid;
+    border-radius: 30px;
+    border-width: 3px;
+    border-color: #09a2f5;
+    max-width: 66vw;
+    min-width: 100px;
+    margin-right: 1vw;
+    margin-bottom: 1vh;
+}
+
+.search-button{
+    position: relative;
+    margin-right: 0.5rem;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 3px;
+    border-color: rgb(110, 144, 244);
+}
+
+.out-border {
+    position: relative;
+    width: 300px;
+    
+    
+}
+
+.login_button {
+	box-shadow: 0px 7px 15px 0px #96C9F4;
+	background:linear-gradient(to bottom, #96C9F4 5%, #3FA2F6 100%);
+	background-color:#96C9F4;
+	border-radius:15px;
+	border:2px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:45px;
+	font-weight:bold;
+	padding:27px 76px;
+	text-decoration:none;
+	text-shadow:0px 3px 0px #263666;
+
+    margin-bottom: 20px;
+}
+.login_button:hover {
+	background:linear-gradient(to bottom, #3FA2F6 5%, #96C9F4 100%);
+	background-color:#3FA2F6;
+}
+.login_button:active {
+	position:relative;
+	top:1px;
+}
+
+#suggestion_box {
+    margin-top: 1px;
+    background: white;
+    padding: 0 10px;
+    border: 1px solid black;
+}
+
+#suggested_items{
+    height:100px;
+    width: 250px;
+    overflow: auto; /* 스크롤바 추가 */
+}
+
+/* 마우스 올리면 색 변화 */
+.item:hover{
+    color: #fff;
+    background-color: lightgreen;
+}
+
+
+
+
+
+.school_button {
+	box-shadow: 0px 7px 15px 0px #36C2CE;
+	background:linear-gradient(to bottom, #36C2CE 5%, #478CCF 100%);
+	background-color:#36C2CE;
+	border-radius:15px;
+	border:2px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:35px;
+	font-weight:bold;
+	padding:27px 76px;
+	text-decoration:none;
+	text-shadow:0px 3px 0px #263666;
+    
+
+    margin-bottom: 20px;
+}
+.school_button:hover {
+	background:linear-gradient(to bottom, #478CCF 5%, #36C2CE 100%);
+	background-color:#478CCF;
+}
+.school_button:active {
+	position:relative;
+	top:1px;
+}
+
+        
+        
+        
+
+
+
+
+/*.BUTTON_XAB {
+    background: #3D94F6;
+    background-image: -webkit-linear-gradient(top, #3D94F6, #1E62D0);
+    background-image: -moz-linear-gradient(top, #3D94F6, #1E62D0);
+    background-image: -ms-linear-gradient(top, #3D94F6, #1E62D0);
+    background-image: -o-linear-gradient(top, #3D94F6, #1E62D0);
+    background-image: -webkit-gradient(to bottom, #3D94F6, #1E62D0);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    height: 20px;
+    line-height: 20px;
+    color: #FFFFFF;
+    font-family: Helvetica;
+    width: 200px;
+    font-size: 45px;
+    font-weight: 700;
+    padding: 40px;
+    -webkit-box-shadow: 1px 1px 20px 0 #000000;
+    -moz-box-shadow: 1px 1px 20px 0 #000000;
+    box-shadow: 1px 1px 20px 0 #000000;
+    text-shadow: 1px 1px 20px #000000;
+    text-align: 
+    border: solid #000000 1px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+ }
+
+*/
+
+
+
+.search-display {
+    width: 100%;
+    position: relative;
+    display: flex;
+    grid-area: header;
+    flex-wrap: nowrap;
+    
+    
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 700px;
+
+    justify-self:center;
+    
+    
+
+}
+
+
 .card {
     position: relative;
     display: flex;
@@ -102,6 +341,15 @@ body{
     background-clip: border-box;
     border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;
+}
+
+.nav-icon-display {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    justify-content: space-evenly;
 }
 
 .card-body {

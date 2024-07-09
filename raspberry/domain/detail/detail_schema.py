@@ -16,6 +16,7 @@ class Detail(BaseModel):
         from_attributes = True
         
 class DetailCreate(BaseModel):
+    trytime : int = 0 # 시도 횟수
     category : str = "" # 문제 분류
     problem : str = "" # 문제 
     problem_answer : str = "" # 문제 답

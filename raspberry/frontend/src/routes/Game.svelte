@@ -3,7 +3,7 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
-    import { is_login } from "../lib/store"
+    import { is_login,school_number } from "../lib/store"
     import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     import { slide } from "svelte/transition";
@@ -52,7 +52,7 @@
                     "이때 첫번째 항을 초항, \n\n 더하는 일정한 수를 공차라고 합니다.\n\n"+\
                     "이정도 내용을 숙지하고 이제 게임을 즐겨봅시다!!" -->
 
-                    <a href="https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/" class="btn btn-primary">게임 하러가기</a>
+                    <a href="https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/?token={school_number}" class="btn btn-primary">게임 하러가기</a>
                 </div>
             </div>
         </div>

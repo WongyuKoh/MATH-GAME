@@ -8,7 +8,7 @@ from domain.user import user_router
 from domain.detail import detail_router
 from domain.rank import rank_router
 from domain.data_extract import de_router
-#from domain.problem_data import pbd_router
+from domain.problem_data import pbd_router
 
 import uvicorn
 
@@ -32,7 +32,7 @@ app.include_router(rank_router.router)
 app.include_router(user_router.router)
 app.include_router(record_router.router)
 app.include_router(de_router.router)
-#app.include_router(pbd_router.router)
+app.include_router(pbd_router.router)
 
 if __name__ == "__main__":
     uvicorn.run(app)

@@ -3,15 +3,22 @@ from pydantic import BaseModel,validator
 
 
 class Problem(BaseModel):
-    problem_in_number : str = ""
-    category_number : int = 0
+    id : int = 0
+    problem : str = ""
+    problem_list : str = "" 
+    category : str = ""
+    trytime : int = 0
+    trystudent : int = 0
+    problem_level : int = 0
+    
     
     class Config:
         from_attributes = True
         
 class ProblemCreate(BaseModel):
-    problem_in_number : str = ""
-    category_number : int = 0
+    problem : str = ""
+    category : str = ""
+
 
 class ProblemList(BaseModel):
     problem_list : list[Problem] = []
