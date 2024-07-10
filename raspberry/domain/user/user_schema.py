@@ -1,12 +1,13 @@
 from pydantic import BaseModel, validator, EmailStr
-from domain.record.record_schema import Record
+from domain.record.record_schema import Record,nodetail_Record
+import datetime
 
 
 # api 입력
 
 class UserCreate(BaseModel):
     
-    school_name : int # 학교 이름
+    school_name : str # 학교 이름
     school_number: int # 학번
     username : str # 실명
     
@@ -40,13 +41,24 @@ class Token(BaseModel): # 로그인 시스템 변경
     token_type: str
     username: str # 학번
     school_number : str
-    school_name : int
+    school_name : str
+    school_id : int
     
 class User(BaseModel):
     school_number : int
     username: str
     school_id : int
     records : list[Record] =[]
+    
+    class Config:
+        from_attributes = True
+        
+        
+class nodetail_User(BaseModel):
+    school_number : int
+    username: str
+    school_id : int
+    records : list[nodetail_Record] =[]
     
     class Config:
         from_attributes = True
@@ -68,3 +80,5 @@ class UserExit(BaseModel):
 class UserScore(BaseModel):
     score : int = 0
     
+class School_id2School_name(BaseModel):
+    school_name : str = ""

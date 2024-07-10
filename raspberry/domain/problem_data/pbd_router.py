@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from database import get_db
-from domain.user.user_router import get_current_user
 from domain.problem_data import pbd_schema,pbd_crud
 router = APIRouter(
     prefix="/api/problem",

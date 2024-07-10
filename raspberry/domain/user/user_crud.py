@@ -25,6 +25,10 @@ def create_user(db: Session, user_create: UserCreate,school_id : int):
     db.commit()
     
     
+def get_si2sn(db:Session,school_id:int):
+    return db.query(School).filter(School.school_id==school_id).first()
+
+    
 def exist_school(db:Session,school_name:str):
     school = db.query(School).filter(School.school_name==school_name).all()
     if len(school)>0:
@@ -41,6 +45,11 @@ def get_existing_user(db: Session, user_create: UserCreate,school_id : int):
 def get_user(db: Session, school_number: int,school_id : int):
 
     return db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
+
+def get_user_detail(db:Session,school_number : int , school_id : int):
+    
+    return db.query(Record).filter(Record.user_id == school_number).filter(Record.school_id==school_id).all()
+
 
 def get_username(db: Session, school_number: int,school_id : int):
     return db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
@@ -151,7 +160,7 @@ def user_school_number_change(db:Session,school_number:int,new_school_number:str
     
     if get_user_exit(db,school_number):
         
-        ID=db.query(User).filter(User.school_number == school_number).first()
+        ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
         ID.school_number=new_school_number
         db.commit()
         async def change_school_number(school_number,new_school_number):
@@ -170,8 +179,8 @@ def user_school_number_change(db:Session,school_number:int,new_school_number:str
         
 
 
-def get_user2name(db: Session, username: str):
-    return db.query(User).filter(User.username == username).first()
+def get_user2name(db: Session, username: str,school_id : int = 0):
+    return db.query(User).filter(User.username == username).filter(User.school_id==school_id).first()
 
 
 def get_user_list(db: Session, school_class: int = 1,school_id : int = 0): # skip : 데이터 시작 위치, limit : 데이터 건수

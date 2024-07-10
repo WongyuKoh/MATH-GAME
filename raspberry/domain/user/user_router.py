@@ -30,7 +30,7 @@ router = APIRouter(
 def user_list(db: Session = Depends(get_db),
                   school_class : int = 1,school_name : str = ""):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     
     total, _user_list = user_crud.get_user_list(
         db, school_class=school_class,school_id=school_id)
@@ -43,19 +43,20 @@ def user_list(db: Session = Depends(get_db),
     }
     
 # user 의 세부 정보를 알려주는 창
-@router.get("/detail/{school_number}", response_model=user_schema.User)
+@router.get("/detail/{school_number}", response_model=user_schema.nodetail_User)
 def user_detail(school_number: int, school_name : str = "", db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     
     user = user_crud.get_user(db, school_number=school_number,school_id=school_id)
-    return user
+    user_record = user_crud.get_user_detail(db,school_number=school_number,school_id=school_id)
+    return {"username":user.username,"school_number":user.school_number,"school_id":school_id,"records":user_record}
 
 # 학교 및 학번 입력시 유저 이름 알려주기
 @router.get("/username/{school_number}", response_model=user_schema.UserName)
 def user_detail(school_number: int, school_name : str,db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     
     user = user_crud.get_username(db, school_number=school_number,school_id=school_id)
     return {"school_number":user.school_number,"username":user.username}
@@ -65,7 +66,7 @@ def user_detail(school_number: int, school_name : str,db: Session = Depends(get_
 @router.get("/user-exist/{school_number}", response_model=user_schema.UserExit)
 def User_Exit(school_number: int, school_name : str, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     
     user_exit = user_crud.get_user_exit(db, school_number=school_number,school_id=school_id)
     return {"user_exit":user_exit} 
@@ -75,7 +76,7 @@ def User_Exit(school_number: int, school_name : str, db: Session = Depends(get_d
 @router.delete("/school-number-delete/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def User_delete(school_number: int, school_name : str, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     
     user_crud.user_delete(db, school_number=school_number,school_id=school_id)
 
@@ -84,21 +85,21 @@ def User_delete(school_number: int, school_name : str, db: Session = Depends(get
 @router.post("/password-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def user_change_password(school_number: int, school_name : str, new_password: str, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     user_crud.user_password_change(db, school_number=school_number,new_password=new_password,school_id=school_id)
 
 # 이름 변경
 @router.post("/username-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def user_change_username(school_number: int, school_name : str, new_username: str, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     user_crud.user_username_change(db, school_number=school_number,new_username=new_username,school_id=school_id)
 
 # 학번 변경
 @router.post("/school-number-change/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def user_change_school_number(school_number: int, school_name : str, new_school_number: str, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(school_name)
+    school_id = exiting_school(db,school_name)
     val=user_crud.user_school_number_change(db, school_number=school_number,new_school_number=new_school_number,school_id=school_id)
     if not val:
         raise HTTPException(status_code=404, detail="user not found")
@@ -118,7 +119,7 @@ def exiting_school(db,school_name):
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
     
-    school_id = exiting_school(_user_create.school_name)
+    school_id = exiting_school(db,_user_create.school_name)
     
         
     
@@ -161,16 +162,26 @@ def user_score(db: Session = Depends(get_db),
     
     return {"score":score}
     
-        
-# 여기부터 아직 안함
+@router.get("/school_id2school_name",response_model=user_schema.School_id2School_name)
+def school_id2school_name(db : Session = Depends(get_db),school_id : int = 0):
+    
+    School=user_crud.get_si2sn(db=db,school_id=school_id)
+    
+    return {"school_name":School.school_name}
+    
+    
+    
 
 @router.post("/login", response_model=user_schema.Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), school_name : str = "",
                            db: Session = Depends(get_db)):
+
+
+    school_id = exiting_school(db,school_name)
 
     # check user and password
     #print(f"form_data.username : {form_data.username}")
-    user = user_crud.get_user2name(db, form_data.username)
+    user = user_crud.get_user2name(db, form_data.username,school_id=school_id)
     # user.password : hash 값, form_data.password : 입력값
     try:
         if not user or not pwd_context.verify(user.password,form_data.password):
@@ -189,7 +200,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
     # make access token
     data = {
         "sub": user.username,
-        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        "exp": datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -197,27 +208,29 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
         "access_token": access_token,
         "token_type": "bearer",
         "username": user.username,
-        "school_number": str(user.school_number)
+        "school_number": str(user.school_number),
+        "school_name":user_crud.get_si2sn(db=db,school_id=user.school_id).school_name,
+        "school_id":user.school_id,
     }
     
-def get_current_user(token: str = Depends(oauth2_scheme),
-                     db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-    else:
-        #print(f'get_current_user user name : {username}')
-        user = user_crud.get_user2name(db, username=username)
-        if user is None:
-            raise credentials_exception
-        return user
+# def get_current_user(token: str = Depends(oauth2_scheme),
+#                      db: Session = Depends(get_db)):
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"},
+#     )
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         username: str = payload.get("sub")
+#         if username is None:
+#             raise credentials_exception
+#     except JWTError:
+#         raise credentials_exception
+#     else:
+#         #print(f'get_current_user user name : {username}')
+#         user = user_crud.get_user2name(db, username=username)
+#         if user is None:
+#             raise credentials_exception
+#         return user
     

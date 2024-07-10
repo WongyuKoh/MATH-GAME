@@ -1,5 +1,5 @@
 import qs from "qs"
-import { access_token, username, is_login,school_number } from "./store"
+import { access_token, username, is_login,school_number,school_name } from "./store"
 import { get } from 'svelte/store'
 import { push } from 'svelte-spa-router'
 
@@ -8,10 +8,20 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     let content_type = 'application/json'
     var save_idx = -1
     let body = JSON.stringify(params) /*{"content":"입력"}*/
+    let school_params = {}
+
+    let _url = import.meta.env.VITE_SERVER_URL+url
+
+    if(get(school_name)!=""){ /* store 를 불러올려면 get 를 써서 불러와야함 */
+        params["school_name"]=get(school_name)
+    }
+
     if(operation === 'login') {
         method = 'post'
         content_type = 'application/x-www-form-urlencoded'
         body = qs.stringify(params)
+        school_params={"school_name":params["school_name"]}
+        _url += "?" + new URLSearchParams(school_params)
     }
     if(method=='get-home'){
         save_idx = params["save_idx"]
@@ -20,7 +30,6 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     }
 
 
-    let _url = import.meta.env.VITE_SERVER_URL+url
     if(method === 'get') {
         _url += "?" + new URLSearchParams(params)
     }

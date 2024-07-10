@@ -4,6 +4,7 @@ import datetime
 from sqlalchemy.sql import func
 
 from domain.record.record_schema import RecordCreate
+import asyncio
 
 
 def DateTimeNow():
@@ -77,30 +78,31 @@ def aidata_record(db: Session, school_number : int, category : str):
     return aidata_record_by_Record
 
 
-def get_record_by_category(db: Session, school_number : int, category : str,cnt : int):
-    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.main_category==category)
+def get_record_by_category(db: Session, school_number : int, category : str,cnt : int,school_id : int):
+    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.school_id==school_id).filter(Record.main_category==category)
     
     get_record_by_category=_get_record_by_category.limit(cnt).all()
 
     return get_record_by_category
 
-def get_record_by_category_all(db: Session, school_number : int, category : str):
-    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.main_category==category).all()
+def get_record_by_category_all(db: Session, school_number : int, category : str,school_id : int):
+    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.school_id==school_id).filter(Record.main_category==category).all()
     
     #print(get_record_by_category)
-    print(_get_record_by_category[0])
+    #print(_get_record_by_category[0])
     return _get_record_by_category
 
-def get_record_cnt_all(db: Session, school_number : int):
-    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).all()
+def get_record_cnt_all(db: Session, school_number : int,school_id : int):
+    _get_record_by_category = db.query(Record).filter(Record.user_id==school_number).filter(Record.school_id==school_id).all()
     
     return len(_get_record_by_category)
 
-def get_record_class_cnt_all(db: Session, school_class: int = 1): # skip : 데이터 시작 위치, limit : 데이터 건수
+def get_record_class_cnt_all(db: Session, school_class: int = 1,school_id : int = 0): # skip : 데이터 시작 위치, limit : 데이터 건수
     _question_list = db.query(User)\
         .order_by(User.school_number.asc()) # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
 
-    question_list = _question_list.filter((User.school_number//100)%10==school_class).all()
+    question_list = _question_list.filter(Record.school_id==school_id).filter((User.school_number//100)%10==school_class).all()
+    
     stack=[]
     user_stack=[]
     for data in question_list:
@@ -108,11 +110,12 @@ def get_record_class_cnt_all(db: Session, school_class: int = 1): # skip : 데�
             stack.append({
                 "school_number" : data.school_number,
                 "username" : data.username, 
-                "record_cnt" : get_record_cnt_all(db,data.school_number)
+                "record_cnt" : get_record_cnt_all(db,school_number=data.school_number,school_id=school_id)
             })
             user_stack.append(data.school_number)
 
-    return stack 
+        
+    return stack
 
 """create_record(db, user=user,
                               record_create=_record_create,

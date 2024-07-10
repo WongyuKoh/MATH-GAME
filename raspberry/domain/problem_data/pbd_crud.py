@@ -21,7 +21,7 @@ def check_problem_in_db(db:Session,text : str):
     else:
         return 0
 
-def try_update(db : Session, problem = "", trytime = 0,):
+def try_update(db : Session, problem : str = "", trytime : int = 0):
     pb=db.query(Problem).filter(Problem.problem==problem).first()
     pb.trytime +=trytime
     pb.trystudent += 1
@@ -38,6 +38,7 @@ def create_problem(db: Session,
                   trytime = 0,trystudent = 0, problem_level = 0):
     
     if check_problem_in_db(db,autoproblemdata["problem"]):
+        try_update(autoproblemdata["problem"],trytime=trytime)
         return
     
     

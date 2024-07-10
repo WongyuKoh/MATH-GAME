@@ -9,6 +9,7 @@ from domain.detail import detail_router
 from domain.rank import rank_router
 from domain.data_extract import de_router
 from domain.problem_data import pbd_router
+from domain.school import school_router
 
 import uvicorn
 
@@ -33,7 +34,8 @@ app.include_router(user_router.router)
 app.include_router(record_router.router)
 app.include_router(de_router.router)
 app.include_router(pbd_router.router)
+app.include_router(school_router.router)
 
 if __name__ == "__main__":
     uvicorn.run(app)
-    #uvicorn.run(app, host="127.0.0.1")# -> 배포시
+    #uvicorn.run(app, host="0.0.0.0")# -> 배포시

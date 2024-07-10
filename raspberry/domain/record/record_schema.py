@@ -40,3 +40,19 @@ class RecordCnt(BaseModel):
     
 class RecordClassCnt(BaseModel):
     record_class : list = []
+    
+class nodetail_Record(BaseModel):
+    id : int = 0
+    main_category : str = ""
+    correct_pb_cnt : int = 0
+    wrong_pb_cnt : int = 0
+    score : int = 0
+    user_name : str = ""
+    create_date: datetime.datetime
+    trytime : int = 0
+    school_id : int = 0
+    
+    
+    class Config:
+        from_attributes = True
+    

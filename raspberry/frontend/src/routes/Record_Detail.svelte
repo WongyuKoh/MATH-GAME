@@ -61,7 +61,8 @@ td : table data, 셀을 만드는 역할
                                     {/if}
                                 </td>
                                 <td>
-                                    {moment(record.create_date).format("YYYY년 MM월 DD일 hh:mm")}
+                                    {moment(record.create_date).format("YYYY년 MM월 DD일 a hh:mm")}
+                                    <!--https://wikidocs.net/176737-->
                                 </td>
                                 <td>
                                     <a use:link href="/profile/{school_number}/log/{record.id}/">자세히 보기</a>

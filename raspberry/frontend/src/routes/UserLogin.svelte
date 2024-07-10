@@ -8,18 +8,21 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     import { push } from 'svelte-spa-router'
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"    
-    import { access_token, username, is_login, school_number } from "../lib/store"
+    import { access_token, username, is_login, school_number,school_id,school_name } from "../lib/store"
 
     let error = {detail:[]}
     let login_username = ""
     let login_password = ""
+    let login_school_name = ""
 
     function login(event) {
         event.preventDefault()
         let url = "/api/user/login"
         let params = {
+            "school_name":login_school_name,
             username: login_username,
-            password: login_password,
+            password: login_password
+            
         }
         /*
         return {
@@ -35,6 +38,8 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
                 $access_token = json.access_token
                 $username = json.username
                 $school_number = json.school_number
+                $school_name = json.school_name
+                $school_id = json.school_id
 
                 $is_login = true
                 push("/")
@@ -51,6 +56,10 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     <h5 class="my-3 border-bottom pb-2">로그인</h5>
     <Error error={error} />
     <form method="post">
+        <div class="mb-3">
+            <label for="username">사용자 학교</label>
+            <input type="text" class="form-control" id="username" bind:value="{login_school_name}" placeholder="enter your school name">
+        </div>
         <div class="mb-3">
             <label for="username">사용자 이름</label>
             <input type="text" class="form-control" id="username" bind:value="{login_username}" placeholder="enter your name">
