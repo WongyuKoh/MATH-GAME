@@ -1,7 +1,7 @@
 #from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from domain.user.user_schema import UserCreate
-from models import User,Record,School
+from models import User,Record,School,Score
 import asyncio
 from argon2 import PasswordHasher
 
@@ -72,61 +72,61 @@ def user_delete(db:Session,school_number:int,school_id : int): # get 은 filter 
 
 # ------------------------------------------------------------------------- #
     
-def user_score_updatebyinput(db:Session,school_number:int,category:str,score : int): # get 은 filter 없을때만 작동
-    ID=db.query(User).filter(User.school_number == school_number).first()
-    if category=="지수":
-        ID.exponential_score=max(score,ID.exponential_score)
-    elif category=="로그":
-        ID.log_score=max(score,ID.log_score)
-    elif category=="수열":
-        ID.sequence_score=max(score,ID.sequence_score)
+def user_score_updatebyinput(db:Session,school_number:int,category:str,score : int,school_id : int): # get 은 filter 없을때만 작동
+    ID=db.query(Score).filter(Score.gametype==category).filter(Score.school_number == school_number).filter(Score.school_id==school_id).first()
+    
+    ID.score = max(ID.score,score)
 
     db.commit()  
     
-def user_score_updatebyrecord(db:Session,school_number:int): # get 은 filter 없을때만 작동
-    record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
-    ID=db.query(User).filter(User.school_number == school_number).first()
-    update_on=0
-    for data in record_list:
-        if data.user_id==school_number:
-            update_on=1
-            if data.main_category=="지수":
-                ID.exponential_score=max(data.score,ID.exponential_score)
-            elif data.main_category=="로그":
-                ID.log_score=max(data.score,ID.log_score)
-            elif data.main_category=="수열":
-                ID.sequence_score=max(data.score,ID.sequence_score)
-        else:
-            if update_on:
-                break
-        db.commit() 
-
-def user_score_update_all(db:Session): # get 은 filter 없을때만 작동
-    record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
-    last_school_number=-1
-    ID=0
-    for data in record_list:
-        if last_school_number!=data.user_id:
-            last_school_number=data.user_id
-            ID=db.query(User).filter(User.school_number == last_school_number).first()
-        if data.main_category=="지수":
-            ID.exponential_score=max(data.score,ID.exponential_score)
-        elif data.main_category=="로그":
-            ID.log_score=max(data.score,ID.log_score)
-        elif data.main_category=="수열":
-            ID.sequence_score=max(data.score,ID.sequence_score)
-
-        db.commit()  
-
-def user_score(db:Session,school_number:int,category:str): # get 은 filter 없을때만 작동
-    ID=db.query(User).filter(User.school_number == school_number).first()
+def user_score_updatebyrecord(db:Session,school_number:int,school_id : int): # get 은 filter 없을때만 작동
     
-    if category=="지수":
-        return ID.exponential_score
-    elif category=="로그":
-        return ID.log_score
-    elif category=="수열":
-        return ID.sequence_score
+    async def updatebyrecord(db:Session):
+        
+        record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
+        ID=db.query(Score).filter(Score.school_number == school_number).filter(Score.school_id==school_id)
+        update_on=0
+        
+        for data in record_list:
+            if data.user_id==school_number:
+                update_on=1
+                SCORE_u = ID.filter(Score.gametype==data.main_category).first()
+                
+                SCORE_u.score = max(SCORE_u.score,data.score)
+                
+            else:
+                if update_on:
+                    break
+                
+            db.commit() 
+
+    asyncio.run(updatebyrecord(db))
+
+
+def user_score_update_all(db:Session,school_id : int): # get 은 filter 없을때만 작동
+    
+    async def score_update_all(db:Session):
+        record_list=db.query(Record).order_by(Record.user_id.asc()).all() # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
+        last_school_number=-1
+        ID=0
+        for data in record_list:
+            if last_school_number!=data.user_id:
+                last_school_number=data.user_id
+                ID=db.query(Score).filter(Score.school_number == last_school_number).filter(Score.school_id==school_id).first()
+                
+                
+            SCORE_u = ID.filter(Score.gametype==data.main_category).first()
+                
+            SCORE_u.score = max(SCORE_u.score,data.score)
+
+            db.commit()  
+            
+    asyncio.run(score_update_all(db=db))
+
+def user_score(db:Session,school_number:int,category:str,school_id : int): # get 은 filter 없을때만 작동
+    ID=db.query(Score).filter(Score.school_number == school_number).filter(Score.school_id==school_id).filter(Score.gametype==category).first()
+    
+    return ID.score
     
  
  # ------------------------------------------------------------------------- #
@@ -136,41 +136,67 @@ def user_score(db:Session,school_number:int,category:str): # get 은 filter 없�
     
     
 def user_password_change(db:Session,school_number:int,new_password:str,school_id:int):
+    
+    if get_user_exit(db,school_number,school_id):
 
-    ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
-    ID.password=pwd_context.hash(new_password)
-    db.commit()
+        ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
+        ID.password=pwd_context.hash(new_password)
+        db.commit()
+        
+        return 1
+    else:
+        return 0
     
 def user_username_change(db:Session,school_number:int,new_username:str,school_id:int):
 
-    ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
-    ID.username=new_username
-    db.commit()
-    async def change_school_number(new_username,school_number):
-        change_list=db.query(Record).filter(Record.user_id==school_number).all()
-        for data in change_list:
-            data.user_name = new_username
-            
-        db.commit()
+
+    if get_user_exit(db,school_number,school_id):
         
-    asyncio.run(change_school_number(school_number=school_number,new_username=new_username))
+        ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
+        ID.username=new_username
+        db.commit()
+        async def change_school_number(new_username,school_number,school_id): # score 테이블도 변경해야 함
+            change_list=db.query(Record).filter(Record.user_id==school_number).filter(Record.school_id==school_id).all()
+            for data in change_list:
+                data.user_name = new_username
+                
+            db.commit()
+            
+            change_list=db.query(Score).filter(Score.school_number==school_number).filter(Score.school_id==school_id).all()
+            for data in change_list:
+                data.username = new_username
+                
+            db.commit()
+            
+        asyncio.run(change_school_number(school_number=school_number,new_username=new_username,school_id=school_id))
+        
+        return 1
+    else:
+        return 0
     
     
 def user_school_number_change(db:Session,school_number:int,new_school_number:str,school_id:int):
     
-    if get_user_exit(db,school_number):
+    if get_user_exit(db,school_number,school_id):
         
         ID=db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
         ID.school_number=new_school_number
         db.commit()
-        async def change_school_number(school_number,new_school_number):
+        async def change_school_number(school_number,new_school_number,school_id):
             change_list=db.query(Record).filter(Record.user_id==school_number).all()
             for data in change_list:
                 data.user_id = new_school_number
                 
             db.commit()
             
-        asyncio.run(change_school_number(school_number=school_number,new_school_number=new_school_number))
+            change_list=db.query(Score).filter(Score.school_number==school_number).filter(Score.school_id==school_id).all()
+            for data in change_list:
+                data.school_number = new_school_number
+                
+            db.commit()
+            
+            
+        asyncio.run(change_school_number(school_number=school_number,new_school_number=new_school_number,school_id=school_id))
         
         return 1
     

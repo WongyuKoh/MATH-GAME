@@ -135,30 +135,38 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
     user_crud.create_user(db=db, user_create=_user_create,school_id = school_id)
     
 @router.post("/score-updatebyinput", status_code=status.HTTP_204_NO_CONTENT)
-def user_list(db: Session = Depends(get_db),
+def user_list(db: Session = Depends(get_db),school_name : str = "",
                   category : str = "", school_number : int = 0, score : int = 0):
     
+    school_id = exiting_school(db,school_name)
+    
     user_crud.user_score_updatebyinput(
-        db, school_number=school_number,category=category,score = score)
+        db, school_number=school_number,category=category,score = score,school_id=school_id)
     
 @router.post("/score-updatebyrecord", status_code=status.HTTP_204_NO_CONTENT)
-def user_list(db: Session = Depends(get_db),
+def user_list(db: Session = Depends(get_db),school_name : str = "",
                    school_number : int = 0):
     
+    school_id = exiting_school(db,school_name)
+    
     user_crud.user_score_updatebyrecord(
-        db, school_number=school_number)
+        db, school_number=school_number,school_id=school_id)
     
 @router.post("/score-update-all", status_code=status.HTTP_204_NO_CONTENT)
-def user_list(db: Session = Depends(get_db)):
+def user_list(db: Session = Depends(get_db),school_name : str = ""):
     
-    user_crud.user_score_update_all(db)
+    school_id = exiting_school(db,school_name)
+    
+    user_crud.user_score_update_all(db,school_id=school_id)
     
 @router.get("/score", response_model=user_schema.UserScore)
-def user_score(db: Session = Depends(get_db),
+def user_score(db: Session = Depends(get_db),school_name : str = "",
                   category : str = "", school_number : int = 0):
     
+    school_id = exiting_school(db,school_name)
+    
     score = user_crud.user_score(
-        db, school_number=school_number,category=category)
+        db, school_number=school_number,category=category,school_id=school_id)
     
     return {"score":score}
     
