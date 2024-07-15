@@ -60,6 +60,8 @@
     let rank = {}
     let slice_cnt=3
     let Main_category = []
+    console.log('-1-21-1-1-1-1-')
+    console.log(MAIN_CATEGORY)
     for(const category_name of MAIN_CATEGORY){
         Main_category.push({category_name:category_name,cnt:0})
     }
@@ -176,7 +178,7 @@
                                                     {/if}
                                                 </td>
                                                 <td>
-                                                    {moment(record.create_date).format("YYYY년 MM월 DD일 hh:mm")}
+                                                    {moment(record.create_date).format("YYYY년 MM월 DD일 a hh:mm")}
                                                 </td>
                                                 <td>
                                                     <a use:link href="/profile/{page_school_number}/log/{record.id}">자세히 보기</a>

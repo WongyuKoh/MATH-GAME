@@ -4,6 +4,7 @@
     import { push,link } from 'svelte-spa-router'
     import {is_login } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
+    import Katex from 'svelte-katex'
     moment.locale('ko')
 
     /*'/profile/:school_number/log/:record_id/': Detail,*/
@@ -53,7 +54,7 @@
         <tbody>
             {#each record_detail_list as detail, i}
             <tr class="text-center">
-                <td>{detail.problem}</td> 
+                <td><Katex>{detail.problem}</Katex></td> 
                 <td>{detail.category}</td>
                 <td>{detail.problem_answer}</td>
                 <td>{detail.user_answers}</td>

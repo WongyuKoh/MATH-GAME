@@ -8,6 +8,7 @@ import asyncio
 from domain.record import record_schema, record_crud
 from domain.user import user_crud
 from domain.detail import detail_crud
+from domain.problem_data.pbd_schema import ProblemCreate,ProblemTitleCreate
 from domain.problem_data import pbd_crud
 
 router = APIRouter(
@@ -26,6 +27,38 @@ def exiting_school(db,school_name):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="학교가 존재하지 않습니다.")
     
     return school_id
+
+
+def findtrytime(text):
+
+	#text=data_parsing['user_answers']
+	text=text.replace(',,',',')
+	text=text.split(',')
+
+	trytime = -1
+	if len(text)==0:
+		if len(text)==0:
+			trytime=5
+		elif text=="ac":
+			trytime=1
+		else:
+			trytime=5
+	else:
+		if text[-1]=='wa' or text[-1]=='w':
+			trytime=5
+		elif text[-1]=='ac' or text[-1]=='c':
+			trytime=len(text)
+		else:
+			if text[-1]=='':
+				trytime=5
+			else:
+				trytime=len(text)
+    
+
+	if trytime>4:
+		trytime=5
+
+	return trytime
 
 
 
@@ -53,7 +86,15 @@ def record_create(school_number: int,school_name : str,
     
         for game_problem in _record_create.detail:
             all_cnt+=detail_crud.create_detail(db,record=new_record,detail_create=game_problem)
-            pbd_crud.create_problem(db,autoproblemdata={"problem":game_problem.problem,"categroy":game_problem.category})
+            
+                
+                
+            pbd_crud.create_problem(db,
+                                    problem_create=ProblemCreate(problem=game_problem.problem,category=game_problem.category,bundles_idx_list=""),
+                                    trytime=findtrytime(game_problem.user_answers)) # 랜덤 문제라고 하더라도 결국 틀이 있고 ,사전에 랜덤 문제의 형태를 넣어줘야되기 때문에 db 에 다 있음
+        """bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
+    problem_digit_idx_list : str = "" 
+        """
                 
             
         record_crud.trytime_update(db,record=new_record,cnt=all_cnt)

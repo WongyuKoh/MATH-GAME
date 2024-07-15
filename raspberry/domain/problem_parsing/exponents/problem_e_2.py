@@ -53,3 +53,8 @@ def data_extract(text):
 	return_list=[int(equation1[0])]+AxB1+AxB2
 
 	return return_list
+
+
+# 5개
+def data_bundles():
+    return [[0,1],[2,4]] # index

@@ -16,3 +16,5 @@ def data_extract(text):
     return [number_parsing(pb[0]),number_parsing(pb[1])]
 
         
+def data_bundles():
+    return [[0,1]] # index

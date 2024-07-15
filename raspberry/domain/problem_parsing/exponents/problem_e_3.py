@@ -94,3 +94,8 @@ def data_extract(text):
 #print(data_extract("\sqrt{\sqrt{{3}^{4}}} = ?"))
 #print(data_extract("\sqrt{{2}^{12}} = ?"))
 #print(data_extract("\sqrt{\sqrt{\sqrt[4]{{3}^{24}}}} = ?"))
+
+
+# 3 ~ 5개
+def data_bundles():
+    return [[-2,-1]] # index, 뒤에 2개 조합, 나머지랑 인덱스 조합

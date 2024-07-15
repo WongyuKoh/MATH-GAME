@@ -36,7 +36,7 @@
                             <a use:link class="nav-link" href="/game">게임</a>
                         </li>
                         <li class="nav-item">
-                            <a use:link class="nav-link" href="/user-login" on:click={() => {
+                            <a use:link class="nav-link" href="/user-login/none" on:click={() => {
                                 $access_token = ''
                                 $username = ''
                                 $school_number = '11111'
@@ -60,7 +60,7 @@
                             <a use:link class="nav-link" href="/user-create">회원가입</a>
                         </li>
                         <li class="nav-item">
-                            <a use:link class="nav-link" href="/user-login">로그인</a>
+                            <a use:link class="nav-link" href="/user-login/none">로그인</a>
                         </li>
                     {/if}
                 </ul>

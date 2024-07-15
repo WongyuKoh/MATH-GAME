@@ -15,9 +15,9 @@
 
   const routes = {
     '/': MainPage,
-    '/home':Home,
+    '/home/:class':Home,
     '/user-create': UserCreate,
-    '/user-login': UserLogin,
+    '/user-login/:school_name': UserLogin,
     '/profile/:school_number/log/:record_id': Detail,
     '/profile/:school_number' : User,
     '/profile/:school_number/Record-Detail/:category':Record_Detail,

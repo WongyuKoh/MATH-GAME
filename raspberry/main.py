@@ -10,6 +10,10 @@ from domain.rank import rank_router
 from domain.data_extract import de_router
 from domain.problem_data import pbd_router
 from domain.school import school_router
+from domain.aimodel import aimodel_router
+from domain.score import score_router
+from domain.gametype import gametype_router
+
 
 import uvicorn
 
@@ -35,6 +39,9 @@ app.include_router(record_router.router)
 app.include_router(de_router.router)
 app.include_router(pbd_router.router)
 app.include_router(school_router.router)
+app.include_router(aimodel_router.router)
+app.include_router(score_router.router)
+app.include_router(gametype_router.router)
 
 if __name__ == "__main__":
     uvicorn.run(app)

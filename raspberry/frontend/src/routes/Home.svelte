@@ -5,25 +5,36 @@
     import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
+
+    export let params = {}
+
     let user_list = []
+    let income_class = params.class
     const total_page = 9
+    let first_income = false
     /* 
+    '/home/:class'
     $: 는 svelte 에서 반응형 을 의미함, 즉 api 호출이 있으면 바뀐 total과 size에 대해 total_page를 구한다
     */
     /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
-    function get_user_list(_school_class) {
+    function get_user_list(income_class,_school_class) {
+        if(!first_income){
+          _school_class = income_class
+        }
+
         let params={
           school_class : _school_class
         }
         fastapi('get', '/api/record/record-class-cnt-all', params, (json) => {
             user_list = json.record_class
             $school_class = _school_class
+            first_income = true
 
         })
 
     }
 
-    $: get_user_list($school_class)
+    $: get_user_list(income_class)
 
     /*
     function get_question_list() {
@@ -75,19 +86,19 @@
   <ul class="pagination justify-content-center">
     <!-- 이전페이지 -->
     <li class="page-item {$school_class <= 1 && 'disabled'}">
-        <button class="page-link" on:click="{() => get_user_list($school_class-1)}">이전</button>
+        <button class="page-link" on:click="{() => get_user_list(income_class,$school_class-1)}">이전</button>
     </li>
     <!-- 페이지번호 -->
     {#each Array(total_page+1) as _, loop_page}
       {#if loop_page!=0} 
         <li class="page-item {loop_page === $school_class && 'active'}">
-          <button on:click="{() => get_user_list(loop_page)}" class="page-link">{loop_page}</button>
+          <button on:click="{() => get_user_list(income_class,loop_page)}" class="page-link">{loop_page}</button>
         </li>
       {/if}
     {/each}
     <!-- 다음페이지 -->
     <li class="page-item {$school_class >= total_page && 'disabled'}">
-        <button class="page-link" on:click="{() => get_user_list($school_class+1)}">다음</button>
+        <button class="page-link" on:click="{() => get_user_list(income_class,$school_class+1)}">다음</button>
     </li>
   </ul>
   <!-- 페이징처리 끝 -->

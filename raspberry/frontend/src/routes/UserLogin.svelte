@@ -10,10 +10,20 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     import Error from "../components/Error.svelte"    
     import { access_token, username, is_login, school_number,school_id,school_name } from "../lib/store"
 
+    export let params={}
+    /*'/user-login/:school_name': UserLogin,*/
+
+
     let error = {detail:[]}
     let login_username = ""
     let login_password = ""
     let login_school_name = ""
+
+    if(params.school_name=="none"){
+        login_school_name = ""
+    }else{
+        login_school_name = params.school_name
+    }
 
     function login(event) {
         event.preventDefault()
@@ -58,7 +68,7 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     <form method="post">
         <div class="mb-3">
             <label for="username">사용자 학교</label>
-            <input type="text" class="form-control" id="username" bind:value="{login_school_name}" placeholder="enter your school name">
+            <input type="text" class="form-control" id="schoolname" bind:value="{login_school_name}" placeholder="enter your school name">
         </div>
         <div class="mb-3">
             <label for="username">사용자 이름</label>

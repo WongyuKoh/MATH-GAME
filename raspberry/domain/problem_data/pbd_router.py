@@ -15,7 +15,8 @@ def problem_create(_problem_create: pbd_schema.ProblemCreate,
     
     
     
-    pbd_crud.create_problem(db=db,problem_create=_problem_create)
+    pbd_crud.create_problem(db=db,problem_create=_problem_create,
+                            trytime=_problem_create.trytime)
 
 
 @router.post("/problem-update", status_code=status.HTTP_204_NO_CONTENT)
@@ -30,6 +31,13 @@ def problem_create(db: Session = Depends(get_db)):
 def problem_create(db: Session = Depends(get_db)):
     
     pbd_crud.problem_trytime_update(db=db)
+    
+
+@router.post("/bundles-idx-list-update", status_code=status.HTTP_204_NO_CONTENT)
+def bundles_create(db: Session = Depends(get_db)):
+    
+    pbd_crud.bundles_update(db=db)
+
 
 
 

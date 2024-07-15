@@ -10,6 +10,7 @@ class Problem(BaseModel):
     trytime : int = 0
     trystudent : int = 0
     problem_level : int = 0
+    bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
     
     
     class Config:
@@ -18,6 +19,8 @@ class Problem(BaseModel):
 class ProblemCreate(BaseModel):
     problem : str = ""
     category : str = ""
+    bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용\
+    trytime : int = 0
 
 
 class ProblemList(BaseModel):

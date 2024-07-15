@@ -28,10 +28,8 @@ class User(Base):
     username = Column(String, nullable=False) # 실제 이름
     password = Column(String, nullable=False)
     
-    log_score = Column(Integer,nullable=False) # log
-    exponential_score = Column(Integer,nullable=False) # 지수
-    sequence_score = Column(Integer,nullable=False) # 수열
     school_id = Column(Integer,nullable=False) # 학교 번호
+    
     
 class Record(Base): # user 에 종속, record 복수
     __tablename__ = "record"
@@ -62,7 +60,8 @@ class Detail(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     trytime = Column(Integer,nullable=False)
     
     record_id = Column(Integer, ForeignKey("record.id"), nullable=True)
-    record = relationship("Record",backref="detail")
+    
+    record = relationship("Record",backref="detail") # Record 라는 클래스에 detail 이라는 이름의 변수를 만듬, 값을 넣는 쪽을 위쪽에 쓴다
     
 class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가짐
     __tablename__ = "problem"
@@ -75,11 +74,37 @@ class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가�
     trystudent = Column(Integer, primary_key=False)
     problem_level = Column(Integer, primary_key=False)
     
+    bundles_idx_list = Column(String,nullable=False) # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
+   
     
 class School(Base):
     __tablename__ = "school_id"
     
     school_id = Column(Integer,primary_key=True)
     school_name = Column(String, nullable=False)
+    address = Column(String, nullable=True)
     
+    
+class Score(Base):
+    __tablename__ = "score"
+    
+    
+    id = Column(Integer,nullable=False,primary_key=True)
+    user_id = Column(Integer,nullable=False)
+    school_id = Column(Integer,nullable=False)
+    gametype = Column(String,nullable=False)
+    score = Column(Integer,nullable=False)
+    
+    username = Column(String,nullable=False)
+    school_number = Column(Integer,nullable=False)
+    
+    
+
+    
+class Gametype(Base):
+    __tablename__ = "gametype"
+    
+    id = Column(Integer,nullable=False,primary_key=True)
+    typename = Column(String,nullable=False)
+    school_id = Column(Integer,nullable=False)
     
