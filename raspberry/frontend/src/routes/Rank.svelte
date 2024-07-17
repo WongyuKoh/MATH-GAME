@@ -31,6 +31,10 @@
     if($rank_category_page==""){
         $rank_category_page="수열"
     }
+    function min(a,b){
+        if(a>b)return b
+        else return a
+    }
     
     function get_rank_all(_class,category) {
         let params = {
@@ -52,8 +56,14 @@
         }
         fastapi("get", "/api/rank/class/list/" + _class, params, (json) => {
             
-            class_rank_list = json.rank_list.slice(0,page_data_cnt)
-            for(var i=0;i<page_data_cnt;i++){
+
+            
+            console.log('----- size --!-- ')
+            console.log(json.rank_list.length)
+            let size = min(page_data_cnt,json.rank_list.length)
+
+            class_rank_list = json.rank_list.slice(0,size)
+            for(var i=0;i<size;i++){
                 _user_rank(class_rank_list[i].school_number,category)
             }
         })
@@ -129,13 +139,7 @@
                                 </div>
 
                                 <span class="mr-25 text-dark-l2 text-nowrap ">
-                                    {#if $rank_category_page=='로그'}
-                                        {rank.log_score}점
-                                    {:else if $rank_category_page=='수열'}
-                                        {rank.sequence_score}점
-                                    {:else if $rank_category_page=='지수'}
-                                        {rank.exponential_score}점
-                                    {/if}
+                                    {rank.score}점
                                 </span>
 
                             </div>
@@ -183,13 +187,7 @@
                                     </div>
                                     
                                     <span class="mr-25 text-dark-l2 text-nowrap ">
-                                        {#if $rank_category_page=='로그'}
-                                            {rank.log_score}점
-                                        {:else if $rank_category_page=='수열'}
-                                            {rank.sequence_score}점
-                                        {:else if $rank_category_page=='지수'}
-                                            {rank.exponential_score}점
-                                        {/if}
+                                        {rank.score}점
                                     </span>
                                 </div>
                             </a>

@@ -235,7 +235,7 @@
         
         </div>
         <div class="unlogin-screen">
-          <img src="../image/gameplay.png" alt="" class="mainpage_image" width="500">
+          <img src="../image/start_ui_3.png" alt="" class="mainpage_image" width="500">
           <div class="out-border">
             <a use:link href="/user-login/none" class="login_button">로그인</a>
             <a use:link href="/user-create" class="school_button">회원가입</a>

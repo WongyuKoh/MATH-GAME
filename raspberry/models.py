@@ -29,6 +29,7 @@ class User(Base):
     password = Column(String, nullable=False)
     
     school_id = Column(Integer,nullable=False) # 학교 번호
+    user_level = Column(Integer,nullable=False)
     
     
 class Record(Base): # user 에 종속, record 복수
@@ -75,6 +76,8 @@ class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가�
     problem_level = Column(Integer, primary_key=False)
     
     bundles_idx_list = Column(String,nullable=False) # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
+    answer = Column(Integer,nullable=False)
+    
    
     
 class School(Base):

@@ -32,40 +32,38 @@ def score_update_all(db:Session):
     
     records = db.query(Record).all()
     
-    async def update_all(db:Session,records):
         
-        for idx, record in enumerate(records):
+    for idx, record in enumerate(records):
+        
+        #print(f"idx : {idx}")
+        
+        find_user_score = db.query(Score).\
+            filter(Score.school_id==record.school_id).\
+            filter(Score.school_number==record.user_id).\
+            filter(Score.gametype==record.main_category).all()
             
-            print(f"idx : {idx}")
+        if len(find_user_score)==0:
             
-            find_user_score = db.query(Score).\
-                filter(Score.school_id==record.school_id).\
-                filter(Score.school_number==record.user_id).\
-                filter(Score.gametype==record.main_category).all()
+            user_status = db.query(User).filter(User.school_id==record.school_id).\
+                filter(User.school_number==record.user_id).first()
+            
+            db_score = Score(
+                school_id = record.school_id,
+                gametype = record.main_category,
+                score = record.score,
+                user_id = user_status.id,
+                username = record.user_name,
+                school_number = record.user_id
                 
-            if len(find_user_score)==0:
-                
-                user_status = db.query(User).filter(User.school_id==record.school_id).\
-                    filter(User.school_number==record.user_id).first()
-                
-                db_score = Score(
-                    school_id = record.school_id,
-                    gametype = record.main_category,
-                    score = record.score,
-                    user_id = user_status.id,
-                    username = record.user_name,
-                    school_number = record.user_id
-                    
-                )
-                db.add(db_score)
+            )
+            db.add(db_score)
 
-                
-            else:
-                find_user_score[0].score = max(record.score,find_user_score[0].score)
             
-            db.commit()
+        else:
+            find_user_score[0].score = max(record.score,find_user_score[0].score)
+        
+        db.commit()
     
-    asyncio.run(update_all(db,records))      
     
     
 

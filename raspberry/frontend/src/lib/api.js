@@ -55,7 +55,6 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
         options['body'] = body
     }
 
-
     fetch(_url, options)
         .then(response => { /* fetch 를 통해 들어온 값이 then 의 response 에 입력되서 then 안에 있는 임의 함수를 실행함*/
             

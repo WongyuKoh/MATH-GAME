@@ -49,6 +49,7 @@ class User(BaseModel):
     username: str
     school_id : int
     records : list[Record] =[]
+    user_level : int 
     
     class Config:
         from_attributes = True
@@ -58,7 +59,9 @@ class nodetail_User(BaseModel):
     school_number : int
     username: str
     school_id : int
+    user_level : int
     records : list[nodetail_Record] =[]
+    user_level : int 
     
     class Config:
         from_attributes = True

@@ -11,6 +11,11 @@ from domain.detail import detail_crud
 from domain.problem_data.pbd_schema import ProblemCreate,ProblemTitleCreate
 from domain.problem_data import pbd_crud
 
+from domain.aimodel import aimodel_router
+
+
+# record school_id 추가 하는 작업 해야됨
+
 router = APIRouter(
     prefix="/api/record",
 )
@@ -75,31 +80,42 @@ def record_create(school_number: int,school_name : str,
         raise HTTPException(status_code=404, detail="user not found")
     
     
+    # ------ evaluate 위치 ------
+    """def user_evaluate(_record_create: record_schema.RecordCreate,
+                  db: Session = Depends(get_db), 
+                  school_number : int = 0, school_name : str = ""):"""
+                  
+    aimodel_router.user_evaluate(db=db,_record_create = _record_create, school_number=school_number,school_name=school_name)
+    
+    # ------------------------
+    
     new_record = record_crud.create_record(db, user=user,
                               record_create=_record_create,school_id=school_id
                               )
 
     
-    async def detail_create_problem(_record_create):
         
-        all_cnt=0
-    
-        for game_problem in _record_create.detail:
-            all_cnt+=detail_crud.create_detail(db,record=new_record,detail_create=game_problem)
-            
-                
-                
-            pbd_crud.create_problem(db,
-                                    problem_create=ProblemCreate(problem=game_problem.problem,category=game_problem.category,bundles_idx_list=""),
-                                    trytime=findtrytime(game_problem.user_answers)) # 랜덤 문제라고 하더라도 결국 틀이 있고 ,사전에 랜덤 문제의 형태를 넣어줘야되기 때문에 db 에 다 있음
-        """bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
-    problem_digit_idx_list : str = "" 
-        """
-                
-            
-        record_crud.trytime_update(db,record=new_record,cnt=all_cnt)
+    all_cnt=0
+
+    for game_problem in _record_create.detail:
+        all_cnt+=detail_crud.create_detail(db,record=new_record,detail_create=game_problem)
         
-    asyncio.run(detail_create_problem(_record_create=_record_create))
+            
+            
+        pbd_crud.create_problem(db,
+                                problem_create=ProblemCreate(problem=game_problem.problem,
+                                                             category=game_problem.category,
+                                                             bundles_idx_list="",
+                                                             answer=game_problem.problem_answer),
+                                
+                                trytime=findtrytime(game_problem.user_answers)) # 랜덤 문제라고 하더라도 결국 틀이 있고 ,사전에 랜덤 문제의 형태를 넣어줘야되기 때문에 db 에 다 있음
+    """bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
+problem_digit_idx_list : str = "" 
+    """
+            
+        
+    record_crud.trytime_update(db,record=new_record,cnt=all_cnt)
+        
         
 
 
@@ -110,11 +126,13 @@ def detail_trytime_update(db: Session = Depends(get_db)):
         
         
 @router.get("/aidata-record/{school_number}/{category}", response_model=record_schema.RecordList)
-def aidata_record(db: Session = Depends(get_db),
+def aidata_record(db: Session = Depends(get_db),school_name : str = "",
                   school_number : int = 11111, category : str = ""):
+    
+    school_id = exiting_school(db,school_name)
 
     rank_user_list = record_crud.aidata_record(
-        db, school_number=school_number,category=category)
+        db, school_number=school_number,category=category,school_id=school_id)
     
     
     return {"record_list":rank_user_list}

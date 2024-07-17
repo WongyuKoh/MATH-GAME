@@ -43,14 +43,14 @@ def user_list(db: Session = Depends(get_db),
     }
     
 # user 의 세부 정보를 알려주는 창
-@router.get("/detail/{school_number}", response_model=user_schema.nodetail_User)
+@router.get("/detail/{school_number}", response_model=user_schema.User)
 def user_detail(school_number: int, school_name : str = "", db: Session = Depends(get_db)):
     
     school_id = exiting_school(db,school_name)
     
     user = user_crud.get_user(db, school_number=school_number,school_id=school_id)
     user_record = user_crud.get_user_detail(db,school_number=school_number,school_id=school_id)
-    return {"username":user.username,"school_number":user.school_number,"school_id":school_id,"records":user_record}
+    return {"username":user.username,"school_number":user.school_number,"school_id":school_id,"records":user_record,"user_level":user.user_level}
 
 # 학교 및 학번 입력시 유저 이름 알려주기
 @router.get("/username/{school_number}", response_model=user_schema.UserName)
@@ -128,9 +128,6 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
     if user: # 409 Conflict
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="이미 존재하는 사용자입니다.")
-    
-
-
     
     user_crud.create_user(db=db, user_create=_user_create,school_id = school_id)
     

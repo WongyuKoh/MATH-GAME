@@ -39,7 +39,19 @@ def bundles_create(db: Session = Depends(get_db)):
     pbd_crud.bundles_update(db=db)
 
 
+@router.post("/problem-answer-update", status_code=status.HTTP_204_NO_CONTENT)
+def answer_update(db: Session = Depends(get_db)):
+    
+    pbd_crud.answer_update(db=db)
 
+
+@router.get("/problem-emit",response_model=pbd_schema.Problem_emit_list)
+def problem_emit(db:Session = Depends(get_db),
+                 school_number : int = 0, school_name : str = "",cnt : int = 0):
+    
+    result = pbd_crud.problem_emit(db=db,school_number=school_number,school_name=school_name,cnt = cnt)
+    
+    return result
 
 
         

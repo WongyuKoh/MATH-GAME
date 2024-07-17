@@ -1,4 +1,4 @@
-from models import User, Record,Detail
+from models import User, Record,Detail,Score
 from sqlalchemy.orm import Session
 import datetime
 from sqlalchemy.sql import func
@@ -55,27 +55,27 @@ def create_record(db: Session, user : User,
     db.add(db_record)
     db.commit()
     
-    ID=db.query(User).filter(User.school_number == user.school_number).first()
-    if record_create.main_category=="지수":
-        ID.exponential_score=max(record_create.score,ID.exponential_score)
-    elif record_create.main_category=="로그":
-        ID.log_score=max(record_create.score,ID.log_score)
-    elif record_create.main_category=="수열":
-        ID.sequence_score=max(record_create.score,ID.sequence_score)
+    ID = db.query(Score).filter(Score.school_id==school_id).\
+        filter(Score.school_number==user.school_number).filter(Score.gametype==record_create.main_category).first()
+    
+    ID.score = max(ID.score,record_create.score)
 
     db.commit()  
     
     return db_record
 
+# -------- 여기까지 수정함 ------- 
 
-# 수정중
-def aidata_record(db: Session, school_number : int, category : str):
-    aidata_record_by_Record = db.query(Record).filter(Record.user_id==school_number).filter(Record.main_category==category).all()
+def aidata_record(db: Session, school_number : int, category : str,school_id : int):
+    aidata_record_by_Record = db.query(Record).filter(Record.school_id==school_id).filter(Record.user_id==school_number).filter(Record.main_category==category).all()
     
     #for i in range(len(aidata_record_by_Record)):
         #aidata_record_by_Record[i]["detail"]
     
     return aidata_record_by_Record
+
+# ------- aimodel 수정 보류 -----------
+
 
 
 def get_record_by_category(db: Session, school_number : int, category : str,cnt : int,school_id : int):
@@ -102,6 +102,7 @@ def get_record_class_cnt_all(db: Session, school_class: int = 1,school_id : int 
         .order_by(User.school_number.asc()) # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
 
     question_list = _question_list.filter(Record.school_id==school_id).filter((User.school_number//100)%10==school_class).all()
+    
     
     stack=[]
     user_stack=[]

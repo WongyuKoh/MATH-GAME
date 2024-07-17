@@ -10,7 +10,7 @@
 
     let search_school_list = ""
     let site_search_text = params.search_text
-    let search_data_cnt = 1
+    let search_data_cnt = 10
     let total_page = 1
 
   /*'/search/:search_text'*/
@@ -30,12 +30,11 @@
             if(json.search_data_cnt==0){
                 total_page = 1
             }else{
-                total_page = (json.serach_data_cnt-1)/search_data_cnt + 1
+                total_page = (json.serach_data_cnt-1)/   + 1
             }
             search_school_list = json.school_search_list
             site_search_text = search_text
             $search_school_page = _search_school_page
-            console.log(search_school_list)
             
         })
     }
@@ -115,7 +114,7 @@ td : table data, 셀을 만드는 역할
                               </div>
 
                               <span class="mr-25 text-dark-l2 text-nowrap ">
-                                ㅁㄴㅇ
+                                {_school_name.address}
                               </span>
 
                           </div>
