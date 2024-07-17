@@ -3,7 +3,7 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
-    import { is_login,school_number } from "../lib/store"
+    import { is_login,school_number,school_name } from "../lib/store"
     import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     import { slide } from "svelte/transition";
@@ -17,7 +17,7 @@
 <div class="container">
     <div class="main-body d-flex justify-content-center">
         <div class="col-md-10">
-            <h5 class="text-center"><b>게임 룰</b></h5>
+            <h5 class="text-center"><b>GAMERULE</b></h5>
             <div class="card text-center">
                 <div class="card-body">
                     이 게임은 수학과 두더지 게임이 융합된 게임입니다.
@@ -50,11 +50,45 @@
                     "등차수열이란?\n\n"+\
                     "첫번째항부터 차례로 일정한 수를 더하여 \n\n 만들어지는 수열을 말합니다.\n\n"+\
                     "이때 첫번째 항을 초항, \n\n 더하는 일정한 수를 공차라고 합니다.\n\n"+\
-                    "이정도 내용을 숙지하고 이제 게임을 즐겨봅시다!!" -->
+                    "이정도 내용을 숙지하고 이제 게임을 즐겨봅시다!!" 
+                    
+                    http://127.0.0.1:5501/?token=20402&type=%EC%A7%80%EC%88%98&school=%EC%9A%B4%ED%98%B8%EA%B3%A0%EB%93%B1%ED%95%99%EA%B5%90
+                    https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/?token={school_number}&type={category}&school={school_name}
+                    -->
 
                     <a href="https://python-programmer1512.github.io/WHACK-THE-MOLE.github.io/?token={school_number}" class="btn btn-primary">게임 하러가기</a>
                 </div>
             </div>
+            <section id="pricing" class="pricing-content section-padding">
+                <div class="container">					
+                    <br>			
+                    <div class="row text-center">									
+                        <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0" style="visibility: visible; animation-duration: 1s; animation-delay: 0.1s; animation-name: fadeInUp;">
+                            <div class="pricing_design">
+                                <div class="single-pricing">
+                                    <div class="price-head">		
+                                        <h2>Starter</h2>
+                                        <h1>$0</h1>
+                                        <span>/Monthly</span>
+                                    </div>
+                                    <ul>
+                                        <li><b>15</b> website</li>
+                                        <li><b>50GB</b> Disk Space</li>
+                                        <li><b>50</b> Email</li>
+                                        <li><b>50GB</b> Bandwidth</li>
+                                        <li><b>10</b> Subdomains</li>
+                                        <li><b>Unlimited</b> Support</li>
+                                    </ul>
+                                    <div class="pricing-price">
+                                        
+                                    </div>
+                                    <a href="#" class="price_btn">Order Now</a>
+                                </div>
+                            </div>
+                        </div><!--- END COL -->		  
+                    </div><!--- END ROW -->
+                </div><!--- END CONTAINER -->
+            </section>
         </div>
     </div>
 </div>

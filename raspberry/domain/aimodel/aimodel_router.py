@@ -162,6 +162,12 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
                                                   category=one_detail.category,
                                                   bundles_idx_list="")
             
+            if bundles=="#" or problem_list=="#":
+                print("!!!!")
+                return {"score":-1,"level":0}
+            
+            print("-----------------")
+            print(bundles)
             bundles = json.loads(bundles)
             problem_list = json.loads(problem_list)
         else:

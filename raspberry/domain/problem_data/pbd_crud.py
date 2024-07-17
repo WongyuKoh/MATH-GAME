@@ -189,7 +189,7 @@ def problem_emit(db:Session,school_number : int, school_name : str,cnt : int):
     user_state = db.query(User).filter(User.school_id==school_id).filter(User.school_number==school_number).first()
     percent=[0,0,0,0] # 상 중 하 랜덤 퍼센트
     
-    print(f"user_level : {user_state.user_level}")
+    #print(f"user_level : {user_state.user_level}")
     
     if user_state.user_level==0:
         percent=[25,25,25,25]
@@ -203,15 +203,15 @@ def problem_emit(db:Session,school_number : int, school_name : str,cnt : int):
     problem_list = []
     
     for i in range(cnt):
-        print("================")
+        #print("================")
         
         rand = choices(range(1,5),weights= [percent[lev]/100 for lev in range(4)])[0]
         
-        print(f"idx : {i}, rand : {rand}")
+        #print(f"idx : {i}, rand : {rand}")
         problem_level=rand
             
-        print("------------")
-        print(f"problem_level : {problem_level}")
+        #print("------------")
+        #print(f"problem_level : {problem_level}")
         
         if problem_level != 4:
         
@@ -245,16 +245,16 @@ def answer_update(db:Session):
             continue
         
         
-        print("----------------------")
+        #print("----------------------")
         #print("#",detail)
         #print(detail.problem)
         pb = db.query(Problem).filter(Problem.problem == detail.problem).first()
         
         if pb.answer!=0:
             continue
-        print(idx)
-        print(pb.problem)
-        print(detail.problem_answer)
+        #print(idx)
+        #print(pb.problem)
+        #print(detail.problem_answer)
         pb.answer = detail.problem_answer
         
         db.commit()
@@ -315,7 +315,7 @@ def problem_trytime_update(db:Session):
     
     for i,detail in enumerate(details): 
         if check_problem_in_db(db,detail.problem):
-            print(detail.id,detail.problem)
+            #print(detail.id,detail.problem)
             try_update(db,detail.problem,detail.trytime)
             
             

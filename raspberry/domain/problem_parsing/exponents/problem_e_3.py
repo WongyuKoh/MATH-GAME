@@ -14,7 +14,7 @@ def text_parsing(pb):
 def ax_b(text):
      
 	spl = text.split("x")
-	print(f"spl : {spl}, text : {text}")
+	#print(f"spl : {spl}, text : {text}")
 	last_v=0
 
 	if len(spl)==1 and spl[0]==text:
