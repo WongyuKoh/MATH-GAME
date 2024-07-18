@@ -1,31 +1,46 @@
 <script>/* script 부분은 처음에 한번만 실행함, 대신 $: 는 계속 실행함*/
-  import fastapi from "../lib/api"
-  import { link } from 'svelte-spa-router'
-  import moment from 'moment/min/moment-with-locales'
-  import {MAIN_CATEGORY} from "../lib/category"
-  import { sub_category_page  } from "../lib/store"
-  moment.locale('ko')
+    import fastapi from "../lib/api"
+    import { link } from 'svelte-spa-router'
+    import moment from 'moment/min/moment-with-locales'
+    import { sub_category_page  } from "../lib/store"
+    moment.locale('ko')
 
-  export let params = {}
-  let school_number = params.school_number
-  let category = params.category
+    export let params = {}
+    let school_number = params.school_number
+    let category = params.category
 
-  let record_list = []
-  const total_page = MAIN_CATEGORY.length
-  /* 
-  $: 는 svelte 에서 반응형 을 의미함, 즉 api 호출이 있으면 바뀐 total과 size에 대해 total_page를 구한다
-  */
-  /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
-  function get_record_list(sub_category) {
-      fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_category, {}, (json) => {
-        record_list = json.record_list
-        $sub_category_page = sub_category
+    let record_list = []
+    
+    let total_page = 0
 
-      })
+    let MAIN_CATEGORY = []
+    let gametypelist = []
+    fastapi("get", "/api/gametype/type-list", {}, (json) => {
+        gametypelist=json.gametype_list
+        MAIN_CATEGORY = []
+        for(const gametype of gametypelist){
+            MAIN_CATEGORY.push(gametype.typename)
+        }
+        total_page = MAIN_CATEGORY.length
 
-  }
+    })
 
-  $: get_record_list(category)
+
+
+    /* 
+    $: 는 svelte 에서 반응형 을 의미함, 즉 api 호출이 있으면 바뀐 total과 size에 대해 total_page를 구한다
+    */
+    /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
+    function get_record_list(sub_category) {
+        fastapi("get", "/api/record/record-by-category-all/" + school_number+"/"+sub_category, {}, (json) => {
+            record_list = json.record_list
+            $sub_category_page = sub_category
+
+        })
+
+    }
+
+    $: get_record_list(category)
 </script>
 
 <!--

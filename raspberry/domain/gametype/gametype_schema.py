@@ -16,3 +16,6 @@ class Gametype(BaseModel):
 class GametypeCreate(BaseModel):
     school_name : str = ""
     typename : str = ""
+
+class GametypeList(BaseModel):
+    gametype_list : list[Gametype] = []

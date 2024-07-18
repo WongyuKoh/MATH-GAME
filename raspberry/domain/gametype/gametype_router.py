@@ -37,3 +37,12 @@ def user_record_class_cnt_all(gametype_input : gametype_schema.GametypeCreate,
     
     if v==0:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="존재하는 게임 유형입니다.")
+    
+    
+@router.get("/type-list", response_model=gametype_schema.GametypeList)
+def user_record_class_cnt_all(school_name : str = "",
+                              db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(db,school_name)
+
+    return {"gametype_list":gametype_crud.type_list(db=db,school_id = school_id)}

@@ -47,7 +47,6 @@
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
     import { school_number } from "../lib/store"
-    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     import { slide } from "svelte/transition";
     moment.locale('ko')
@@ -60,11 +59,21 @@
     let rank = {}
     let slice_cnt=3
     let Main_category = []
-    console.log('-1-21-1-1-1-1-')
-    console.log(MAIN_CATEGORY)
-    for(const category_name of MAIN_CATEGORY){
-        Main_category.push({category_name:category_name,cnt:0})
-    }
+    //console.log('-1-21-1-1-1-1-')
+    //console.log(MAIN_CATEGORY)
+
+    let MAIN_CATEGORY = []
+    let gametypelist = []
+    fastapi("get", "/api/gametype/type-list", {}, (json) => {
+        gametypelist=json.gametype_list
+        MAIN_CATEGORY = []
+        for(const gametype of gametypelist){
+
+            MAIN_CATEGORY.push(gametype.typename)
+            Main_category.push({category_name:gametype.typename,cnt:0})
+        }
+        get_record_all()
+    })
 
     
     let gameplay_sum=0
@@ -109,7 +118,6 @@
 
 
 
-    get_record_all()
 
 
 </script>

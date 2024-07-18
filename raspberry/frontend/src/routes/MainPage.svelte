@@ -2,7 +2,6 @@
     import fastapi from "../lib/api"
     import { link } from 'svelte-spa-router'
     import {is_login, access_token, username, school_number,school_id,school_name,rank_category_page  } from "../lib/store"
-    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     
     const emojis = {
@@ -38,10 +37,33 @@
     let records=[]
     let Main_category = []
     let user_list = []
+    
     let user_class = Math.floor(page_school_number/100)%10
     const total_page = 9
-    for(const category_name of MAIN_CATEGORY){
-        Main_category.push({category_name:category_name,cnt:0})
+
+    let MAIN_CATEGORY = []
+    let gametypelist = []
+
+
+    function gametype_list(){
+      fastapi("get", "/api/gametype/type-list", {}, (json) => {
+
+        gametypelist=json.gametype_list
+        MAIN_CATEGORY = []
+        //console.log('gametypelist : ',gametypelist)
+
+        for(const gametype of gametypelist){
+          MAIN_CATEGORY.push(gametype.typename)
+          Main_category.push({category_name:gametype.typename,cnt:0})
+        }
+        //console.log(MAIN_CATEGORY,Main_category)
+
+        get_record_all()
+        get_record_recent()
+        get_user_list(user_class)
+
+      })
+
     }
 
     function get_user_list(_school_class) {
@@ -50,8 +72,8 @@
         }
         fastapi('get', '/api/record/record-class-cnt-all', params, (json) => {
             user_list = json.record_class
-            console.log('----')
-            console.log(user_list)
+            //console.log('----')
+            //console.log(user_list)
 
         })
 
@@ -99,12 +121,10 @@
             //console.log('!!',rank[category],category)
         })
     }
-    if($is_login){
-      get_record_all()
-      get_record_recent()
-      get_user_list(user_class)
-    }
 
+    if($is_login){
+      gametype_list()
+    }
 
   </script>
 
@@ -239,8 +259,8 @@
           <div class="out-border">
             <a use:link href="/user-login/none" class="login_button">로그인</a>
             <a use:link href="/user-create" class="school_button">회원가입</a>
-            <a use:link href="/game" class="school_button">학교등록</a>
-            <a use:link href="/game" class="login_button">게임</a>
+            <a use:link href="/school" class="school_button">학교등록</a>
+            <a use:link href="/game" class="gamerule_button">게임방법</a>
           </div>
           
         </div>

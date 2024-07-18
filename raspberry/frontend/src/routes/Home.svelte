@@ -2,7 +2,6 @@
     import fastapi from "../lib/api"
     import { link } from 'svelte-spa-router'
     import { school_class,is_login, access_token, username, school_number  } from "../lib/store"
-    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 

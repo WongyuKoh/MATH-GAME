@@ -12,6 +12,7 @@
   import Game from './routes/Game.svelte'
   import UserSetting from './routes/User_setting.svelte'
   import Search from './routes/Search.svelte'
+  import School from './routes/School.svelte'
 
   const routes = {
     '/': MainPage,
@@ -24,7 +25,8 @@
     '/rank' : Rank,
     '/game' : Game,
     '/profile/:school_number/setting':UserSetting,
-    '/search/:search_text' : Search
+    '/search/:search_text' : Search,
+    '/school' : School
 
     
     /*

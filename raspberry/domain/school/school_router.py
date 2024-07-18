@@ -4,15 +4,29 @@ from starlette import status
 
 from database import get_db
 from domain.school import school_schema,school_crud
+from domain.user import user_crud
+
 router = APIRouter(
     prefix="/api/school",
 )
 # ----- problem ------ 
 
+def exiting_school(db,school_name):
+    school_id = user_crud.exist_school(db,school_name)
+    
+    if school_id==0:
+        return 0
+    
+    return 1
+    
+
+
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def school_create(_school_create: school_schema.SchoolCreate,
                   db: Session = Depends(get_db)):
     
+    if exiting_school(db,_school_create.school_name):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="학교가 이미 존재합니다.")
     
     
     school_crud.create_school(db,_school_create.school_name,address=_school_create.address)

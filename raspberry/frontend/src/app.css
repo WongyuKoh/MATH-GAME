@@ -445,6 +445,34 @@ body{
 	top:1px;
 }
 
+.gamerule_button {
+	box-shadow: 0px 7px 15px 0px #36C2CE;
+	background:linear-gradient(to bottom, #36C2CE 5%, #478CCF 100%);
+	background-color:#36C2CE;
+	border-radius:15px;
+	border:2px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:35px;
+	font-weight:bold;
+	padding:27px 76px;
+	text-decoration:none;
+	text-shadow:0px 3px 0px #263666;
+    
+
+    margin-bottom: 20px;
+}
+.gamerule_button:hover {
+	background:linear-gradient(to bottom, #478CCF 5%, #36C2CE 100%);
+	background-color:#478CCF;
+}
+.gamerule_button:active {
+	position:relative;
+	top:1px;
+}
+
         
         
         
@@ -672,10 +700,10 @@ body{
 .pricing-content{position:relative;}
 .pricing_design{
     position: relative;
-    margin: 0px 15px;
+    margin: 10px 15px;
 }
 .pricing_design .single-pricing{
-    background:#554c86;
+    background:#5bc0de;
     padding: 60px 40px;
     border-radius:30px;
     box-shadow: 0 10px 40px -10px rgba(0,64,128,.2);
@@ -712,7 +740,7 @@ body{
 	line-height: 36px;
 }
 .single-pricing ul li i {
-	background: #554c86;
+	background: #5bc0de;
 	color: #fff;
 	width: 20px;
 	height: 20px;
@@ -725,7 +753,7 @@ body{
 .pricing-price{}
 
 .price_btn {
-	background: #554c86;
+	background: #5bc0de;
 	padding: 10px 30px;
 	color: #fff;
 	display: inline-block;
@@ -753,3 +781,43 @@ text-decoration:none;
     position: relative;
     text-transform: capitalize;
 }
+
+/* login */
+.jumbotron label {
+    font-size:12px;    
+}
+
+.reg-icon{
+    color:#5bc0de;
+    font-weight:bold;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4) !important;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #fff;
+    background-color: #5bc0de;
+}
+
+.prj-name{
+    font-weight:bold;
+    color:#5bc0de;
+}
+
+.login_center {
+    margin: 0 auto;
+
+}
+.login_border {
+    border-color: #36C2CE;
+    border-style: solid;
+    border-radius:9px;
+    border-width: 3px;
+
+}
+
+.login_text {
+    position: relative;
+    font-size: 15px;
+
+}
+

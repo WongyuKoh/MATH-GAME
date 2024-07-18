@@ -12,8 +12,13 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
 
     let _url = import.meta.env.VITE_SERVER_URL+url
 
-    if(get(school_name)!=""){ /* store 를 불러올려면 get 를 써서 불러와야함 */
+    if(get(school_name)!="" && method !== 'login' && method !== 'school_post'){ /* store 를 불러올려면 get 를 써서 불러와야함 */
+        //console.log('#@')
+        //console.log(get(school_name))
         params["school_name"]=get(school_name)
+    }
+    if(method === 'school_post'){
+        method = 'post'
     }
 
     if(operation === 'login') {
@@ -97,11 +102,14 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
                         if (failure_callback) {
                             failure_callback(json)
                         }else {
+                            //console.log('!!')
                             alert(JSON.stringify(json))
                         }
                     }
                 })
                 .catch(error => {
+                    console.log('!!!')
+                    console.log(error)
                     alert(JSON.stringify(error))
                 })
         })

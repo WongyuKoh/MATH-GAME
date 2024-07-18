@@ -28,3 +28,6 @@ def create_type(db: Session, school_id: int,typename:int):
     
     return 1
     
+    
+def type_list(db:Session,school_id : int):
+    return db.query(Gametype).filter(Gametype.school_id==school_id).all()

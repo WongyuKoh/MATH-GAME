@@ -3,9 +3,23 @@
     import Error from "../components/Error.svelte"
     import { push,link } from 'svelte-spa-router'
     import { is_login, school_number ,rank_category_page} from "../lib/store"
-    import {MAIN_CATEGORY} from "../lib/category"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
+
+    let MAIN_CATEGORY = []
+    let gametypelist = []
+    fastapi("get", "/api/gametype/type-list", {}, (json) => {
+        gametypelist=json.gametype_list
+        MAIN_CATEGORY = []
+        for(const gametype of gametypelist){
+            MAIN_CATEGORY.push(gametype.typename)
+        }
+        scoreboard_update($rank_category_page)
+        console.log("MAIN_CATEGORY :",MAIN_CATEGORY)
+        
+
+    })
+
 
     const emojis = {
         "1st" : "🥇",
@@ -58,8 +72,8 @@
             
 
             
-            console.log('----- size --!-- ')
-            console.log(json.rank_list.length)
+            //console.log('----- size --!-- ')
+            //console.log(json.rank_list.length)
             let size = min(page_data_cnt,json.rank_list.length)
 
             class_rank_list = json.rank_list.slice(0,size)
@@ -90,7 +104,6 @@
 
     }
 
-    $: scoreboard_update($rank_category_page)
 
 
     /*get_score($school_number)*/
