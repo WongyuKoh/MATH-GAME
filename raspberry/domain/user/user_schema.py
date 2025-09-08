@@ -55,6 +55,14 @@ class User(BaseModel):
         from_attributes = True
         
         
+class User_limit(BaseModel):
+    records : list[Record] =[]
+    records_cnt : int
+    
+    class Config:
+        from_attributes = True
+        
+        
 class nodetail_User(BaseModel):
     school_number : int
     username: str

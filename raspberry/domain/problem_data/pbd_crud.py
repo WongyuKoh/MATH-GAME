@@ -15,6 +15,7 @@ from starlette import status
 from random import *
 
 from domain.problem_data import pbd_schema
+from domain.gametype import gametype_crud
 
 # class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가짐
 #     __tablename__ = "problem"
@@ -51,7 +52,7 @@ def problem_level_return(trytime,trystudent):
     else:
         return 3 # 난이도 하
 
-def plbil(bundles_idx_list,category,problem_text):
+def plbil(bundles_idx_list,category,problem_text): # 여기서 데이터 추출 위치 설정
     if category == '지수 함수 값 계산하기':
         problem_list = str(pe1.data_extract(problem_text))
 
@@ -86,12 +87,13 @@ def plbil(bundles_idx_list,category,problem_text):
 
 def create_problem(db: Session,
                   problem_create: ProblemCreate = None,
-                  trytime = 0):
+                  trytime = 0,main_category :str = ""):
     
     if check_problem_in_db(db,problem_create.problem):
         try_update(db,problem_create.problem,trytime=trytime)
         return
     
+    #print("XCVXCVX",main_category)
     
     trystudent=1
     problem_level = problem_level_return(trytime=trytime,trystudent=trystudent)
@@ -115,6 +117,7 @@ def create_problem(db: Session,
                                         category=category,
                                         problem_text=problem_text)
     
+    #print("!@#@!#!@#")
     db_problem = Problem(
         problem=problem_text,
         problem_list=problem_list,
@@ -123,7 +126,8 @@ def create_problem(db: Session,
         trystudent = trystudent,
         problem_level = problem_level,
         bundles_idx_list = bundles_idx_list,
-        answer = problem_create.answer
+        answer = problem_create.answer,
+        main_category = main_category
         
                          )
     db.add(db_problem)
@@ -178,14 +182,22 @@ def exiting_school(db: Session,school_name: str):
     if school_id==0:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="학교가 존재하지 않습니다.")
     
-    return school_id    
+    return school_id   
+
+def check_category(db :Session, category : str, school_id : int):
+    Category =  gametype_crud.check_category(db=db,category=category,school_id=school_id)
+    
+    if not Category:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="카테고리가 존재하지 않습니다.")
+        
 
 
     
 #pbd_crud.problem_emit(db=db,username=username,school_name=school_name,problem_level=problem_level)
-def problem_emit(db:Session,school_number : int, school_name : str,cnt : int):
+def problem_emit(db:Session,school_number : int, school_name : str,cnt : int,category : str):
     
     school_id = exiting_school(db,school_name)
+    check_category(db,category=category,school_id=school_id)
     user_state = db.query(User).filter(User.school_id==school_id).filter(User.school_number==school_number).first()
     percent=[0,0,0,0] # 상 중 하 랜덤 퍼센트
     
@@ -215,7 +227,7 @@ def problem_emit(db:Session,school_number : int, school_name : str,cnt : int):
         
         if problem_level != 4:
         
-            one_problem = db.query(Problem.problem,Problem.category,Problem.answer,Problem.problem_level).filter(Problem.problem_level==problem_level).all()
+            one_problem = db.query(Problem.problem,Problem.category,Problem.answer,Problem.problem_level,Problem.main_category).filter(Problem.main_category==category).filter(Problem.problem_level==problem_level).all()
             
             if len(one_problem)==0:
                 problem_list.append(pbd_schema.Problem_Emit(problem_level=4))

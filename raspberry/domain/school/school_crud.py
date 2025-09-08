@@ -12,7 +12,8 @@ def create_school(db:Session,school_name : str,address : str):
     db.add(db_school)
     db.commit()
     
-    
+    return db_school
+
 def school_list(db:Session):
     
     schools=db.query(School).all()
@@ -34,6 +35,3 @@ def school_limited_search_list(db:Session,search_text:str,search_data_cnt : int,
     search_result = _search_result.offset(search_data_cnt*(now_page-1)).limit(search_data_cnt).all()
 
     return search_result_cnt,search_result
-
-
-#rank_list = _rank_list.offset(page_data_cnt*(now_page-1)).limit(page_data_cnt).all()

@@ -15,7 +15,7 @@
             MAIN_CATEGORY.push(gametype.typename)
         }
         scoreboard_update($rank_category_page)
-        console.log("MAIN_CATEGORY :",MAIN_CATEGORY)
+        //console.log("MAIN_CATEGORY :",MAIN_CATEGORY)
         
 
     })

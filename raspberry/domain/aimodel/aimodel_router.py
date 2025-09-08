@@ -39,7 +39,7 @@ def reverse_func(model,x): # x는 n번째 시도 때 시도/문제수 값
 
 def FUNC(model,n,x): #  n : 실제 시도 횟수, x : 시도 때 시도/문제수 값
     #print(max(0,(reverse_func(model,x)[0]-n)))
-    return max(1,10-max(0,(reverse_func(model,x)[0]-n))/10)
+    return max(1,10-max(0,(reverse_func(model,x)[0]-n))/10) # 모델이 tensor 라 reverse_func 이 tensor 로 와서 [0] 힌듯
 
 
 def findtrytime(text):
@@ -93,7 +93,7 @@ def e2(db : Session,score : int,school_id : int,category : str): # x : 현재 �
         
     rank = _rank_list.filter(Score.score>score).count()+1 
     
-    return min(max(0,(-2/13)*rank + 40),40)
+    return min(max(0,(-2/13)*rank + 40),40) # 학교 전체 인원수를 기준으로 1등이 40 근사치를 먹을 수 있게하는 1차 방정식
 
 
 def exiting_school(db: Session,school_name: str):
@@ -117,7 +117,7 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
     
     last_details = get_user_detail(db,school_id=school_id,school_number=school_number)
     
-    #print(last_details)
+    #print(last_details,"HJHRTHR")
     #_record_create
     records=[]
     for record in last_details:
@@ -128,12 +128,16 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
         
     X=[i+1 for i in range(len(records))]
     
-    
+    if len(X)==0:
+        return {"score":-1,"level":-1}
+        
+    # 학생의 발전 가능성을 선형회귀로 표시
+    # 발전 가능성보다 더 빨리 
         
     model = LinearRegression()
     x=np.array(X)
     y=np.array(records)
-    model.fit(X=x.reshape(-1, 1),y=y)
+    model.fit(X=x.reshape(-1, 1),y=y) # 라운드별 시도횟수에 대한 선형회귀 예측
 
     #pred = model.predict(x.reshape(-1, 1))
         
@@ -143,9 +147,9 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
         # 수정하기
         return {"score":-1,"level":-1}
     
-    V = _record_create.trytime/(_record_create.correct_pb_cnt+_record_create.wrong_pb_cnt)
+    V = _record_create.trytime/(_record_create.correct_pb_cnt+_record_create.wrong_pb_cnt) # 
     
-    rate = FUNC(model,len(X)+1,V)
+    rate = FUNC(model,len(X)+1,V) # len(x)+1 : 현재 게임 번째수, V : 방금 한 게임에 대한 시도횟수
     
     game_detail = _record_create.detail #detail_crud.get_detail_list(db=db,record_id=record_id)
     
@@ -174,13 +178,16 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
             #one_detail.category
             one_problem = one_problem[0]
             
+            if one_problem.bundles_idx_list=="#" or one_problem.problem_list=="#":
+                return {"score":-1,"level":-1}
+            
             bundles = json.loads(one_problem.bundles_idx_list)
             problem_list = json.loads(one_problem.problem_list)
             
         
         # db 에 없는 데이터가 있을 수 있음
         
-        cnt=findtrytime(one_detail.user_answers)
+        cnt=findtrytime(one_detail.user_answers) #  문제에 대한 시도횟수
         
         # 조합을 지정해서 묶는게 좋을 듯
         # 문제 별 조합을 db 에 저장, 저장된걸 불러오는 형식
@@ -210,10 +217,10 @@ def user_evaluate(_record_create: record_schema.RecordCreate,
     result = []    
                 
     for data in data_value:
-        result.append(10*(data_value[data][0]/data_value[data][1]))
+        result.append(10*(data_value[data][0]/data_value[data][1])) # S_(a,b)
         
         
-    STD = np.std(np.array(result))
+    STD = np.std(np.array(result)) # 표준편차
     
     P = e1(STD) + e2(db,_record_create.score,school_id,_record_create.main_category)
     

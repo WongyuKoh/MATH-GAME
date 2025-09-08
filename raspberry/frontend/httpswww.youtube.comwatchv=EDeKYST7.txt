@@ -6,3 +6,7 @@ https://tauri.app/v1/guides/getting-started/setup/sveltekit
 
 
 \sqrt{\sqrt{{3}^{4}}} = ?
+
+
+이거 따라하기
+https://data-science.tistory.com/303

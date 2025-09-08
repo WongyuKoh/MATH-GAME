@@ -1,4 +1,4 @@
-from models import User, Record,Detail,Score
+from models import User, Record,Detail,Score,Gametype
 from sqlalchemy.orm import Session
 import datetime
 from sqlalchemy.sql import func
@@ -16,11 +16,45 @@ def DateTimeNow():
 def get_record(db: Session, question_id: int):
     question = db.query(Record).get(question_id)
     return question
+                         
+def class_record_category_cnt(db:Session,school_id:int,user_schoolnumber : int):
+    
+    Categorys = db.query(Gametype).filter(Gametype.school_id==school_id).all()
 
-"""create_record(db, user=user,
-                              record_create=_record_create,
-                              record=current_user)"""
-                              
+    _get_record_by_category = db.query(Record).filter(Record.school_id==school_id).filter(Record.user_id==user_schoolnumber)
+    
+    cntlist={}
+    
+    for category in Categorys:
+        cntlist[category.typename] = _get_record_by_category.filter(Record.main_category.like(category.typename)).count()
+        
+    
+    return cntlist
+        
+def category_try(db : Session, school_class:int,school_id : int):
+
+    user_list = db.query(User).order_by(User.school_number.asc()).filter(User.school_id==school_id).filter((User.school_number//100)%10==school_class).all()
+    # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
+    
+    
+    
+    result=[]
+    for user in user_list:
+        
+        cntlist = class_record_category_cnt(db=db, school_id=school_id,user_schoolnumber=user.school_number)
+        
+        #print(cntlist)
+
+        result.append({"username" : user.username,"school_number" : user.school_number,"category":cntlist})
+        
+        
+    #print("result")
+    #print(result)
+
+        
+    return result
+    
+  
                               
 def trytime_update(db : Session, record : Record,cnt : int):
     record_by_id = db.query(Record).filter(Record.id == record.id).first()
@@ -101,7 +135,7 @@ def get_record_class_cnt_all(db: Session, school_class: int = 1,school_id : int 
     _question_list = db.query(User)\
         .order_by(User.school_number.asc()) # order_by : 정렬, desc : 내림차순 정렬, asc : 오름차순 정렬
 
-    question_list = _question_list.filter(Record.school_id==school_id).filter((User.school_number//100)%10==school_class).all()
+    question_list = _question_list.filter(User.school_id==school_id).filter((User.school_number//100)%10==school_class).all()
     
     
     stack=[]

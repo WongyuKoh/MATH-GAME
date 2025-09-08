@@ -12,6 +12,10 @@ from database import get_db
 from domain.user import user_crud, user_schema
 from domain.user.user_crud import pwd_context
 
+from domain.gametype import gametype_crud
+from domain.score import score_router,score_schema
+
+
 # https://velog.io/@munang/Python-FastAPI-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%A3%BC%EC%9E%85-Depends-%ED%95%A8%EC%88%98
 # Depends 함수는 그 안에 있는 값을 먼저 실행함
 
@@ -51,6 +55,21 @@ def user_detail(school_number: int, school_name : str = "", db: Session = Depend
     user = user_crud.get_user(db, school_number=school_number,school_id=school_id)
     user_record = user_crud.get_user_detail(db,school_number=school_number,school_id=school_id)
     return {"username":user.username,"school_number":user.school_number,"school_id":school_id,"records":user_record,"user_level":user.user_level}
+
+# 최근 기록 n개
+@router.get("/detail-limit/{school_number}", response_model=user_schema.User_limit)
+def user_detail(school_number: int,
+                school_name : str = "", page : int = 0, cnt : int = 0,
+                db: Session = Depends(get_db)):
+    
+    school_id = exiting_school(db,school_name)
+
+    user_record, all_cnt = user_crud.get_user_detail_limit(db,school_number=school_number,school_id=school_id,page = page, cnt = cnt)
+    return {"records":user_record,"records_cnt":all_cnt}
+
+
+
+
 
 # 학교 및 학번 입력시 유저 이름 알려주기
 @router.get("/username/{school_number}", response_model=user_schema.UserName)
@@ -129,7 +148,12 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="이미 존재하는 사용자입니다.")
     
-    user_crud.create_user(db=db, user_create=_user_create,school_id = school_id)
+    user_id = user_crud.create_user(db=db, user_create=_user_create,school_id = school_id)
+    
+
+    gametypelist=gametype_crud.type_list(db=db,school_id=school_id)
+    for type in gametypelist:
+        score_router.create_score(db=db,school_name=_user_create.school_name,score_input=score_schema.ScoreCreate(user_id=user_id,gametype=type.typename,score=0))
     
 @router.post("/score-updatebyinput", status_code=status.HTTP_204_NO_CONTENT)
 def user_list(db: Session = Depends(get_db),school_name : str = "",
@@ -161,6 +185,9 @@ def user_score(db: Session = Depends(get_db),school_name : str = "",
                   category : str = "", school_number : int = 0):
     
     school_id = exiting_school(db,school_name)
+    
+    print("user check")
+    print(f"school number : {school_number}, category : {category}")
     
     score = user_crud.user_score(
         db, school_number=school_number,category=category,school_id=school_id)

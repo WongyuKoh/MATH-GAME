@@ -12,10 +12,6 @@ from database import get_db
 from domain.data_extract import de_schema
 from domain.data_extract import de_crud
 
-# https://velog.io/@munang/Python-FastAPI-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%A3%BC%EC%9E%85-Depends-%ED%95%A8%EC%88%98
-# Depends 함수는 그 안에 있는 값을 먼저 실행함
-
-
 router = APIRouter(
     prefix="/api/db",
 )

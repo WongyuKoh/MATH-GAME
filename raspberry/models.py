@@ -77,6 +77,7 @@ class Problem(Base): # user 에 종속, record 복수, record id 를 id로 가�
     
     bundles_idx_list = Column(String,nullable=False) # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
     answer = Column(Integer,nullable=False)
+    main_category = Column(String,nullable=False)
     
    
     

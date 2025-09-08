@@ -17,18 +17,13 @@
     function func(e){
       if(e.keyCode==13){
         if(search_text==""){
-            window.location.href = '/#/search/noinput';
+            window.location.href = './#/search/noinput';
         }else{
-            window.location.href = '/#/search/'+search_text;
+            window.location.href = './#/search/'+search_text;
         }
 		  }
     }
-    /* 
-    $: 는 svelte 에서 반응형 을 의미함, 즉 api 호출이 있으면 바뀐 total과 size에 대해 total_page를 구한다
-    */
-    /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
 
-    /* 로그인 시 사용할 함수들 */
     let page_school_number = $school_number
     let error = {detail:[]}
     let rank = {}
@@ -50,13 +45,11 @@
 
         gametypelist=json.gametype_list
         MAIN_CATEGORY = []
-        //console.log('gametypelist : ',gametypelist)
 
         for(const gametype of gametypelist){
           MAIN_CATEGORY.push(gametype.typename)
           Main_category.push({category_name:gametype.typename,cnt:0})
         }
-        //console.log(MAIN_CATEGORY,Main_category)
 
         get_record_all()
         get_record_recent()
@@ -72,8 +65,7 @@
         }
         fastapi('get', '/api/record/record-class-cnt-all', params, (json) => {
             user_list = json.record_class
-            //console.log('----')
-            //console.log(user_list)
+
 
         })
 
@@ -128,13 +120,6 @@
 
   </script>
 
-<!--
-  https://aboooks.tistory.com/59
-  tr  : table row, 가로줄 만드는거(데이터 들어가는 라인의 가장 윗부분 대로)
-  th : table head , 표의 제목
-  td : table data, 셀을 만드는 역할
--->
-
 <div class="container my-3">
   {#if $is_login }
     <div class="SCREEN_login">
@@ -143,7 +128,7 @@
           <a href="#/profile/{page_school_number}/" style="text-decoration:none; color:black">
             <div class="card card-body active-profile">
               <div class="d-flex flex-column align-items-center text-center">
-                  <img src="https://i.ibb.co/CwwJsL4/init-profile.png" alt="Admin" class="rounded-circle user_image" width="150">
+                  <img src="https://i.postimg.cc/Df6r7rkg/init-profile.png" alt="Admin" class="rounded-circle user_image" width="150">
                   <div class="mt-3">
                       <h4>{UserName}({page_school_number})</h4>
                       {#each MAIN_CATEGORY as category_name,i}
@@ -176,10 +161,10 @@
                                       <td>{recent_record.main_category}</td>
                                       <td>{recent_record.score}점</td>
                                       <td>
-                                          {#if (recent_record.trytime)==0}
+                                          {#if (recent_record.correct_pb_cnt+recent_record.wrong_pb_cnt)==0}
                                             {"0%"}
                                           {:else}
-                                            {Math.round(100*(recent_record.correct_pb_cnt)/(recent_record.trytime))}%
+                                            {Math.round(100*(recent_record.correct_pb_cnt)/(recent_record.correct_pb_cnt+recent_record.wrong_pb_cnt))}%
                                           {/if}
                                       </td>
                                       <td>
@@ -192,7 +177,7 @@
                           </tbody>
                       </table>
                       <div class="text-center">
-                          <a use:link href="/profile/{page_school_number}/Record-Detail/{43}" class="btn btn-primary">더보기</a>
+                          <a use:link href="/user-record/{page_school_number}" class="btn btn-primary">더보기</a>
                       </div>
                   </div>
               </div>
@@ -202,7 +187,7 @@
         <div class="class_info_rank">
           <div class="game_start_button">
             <a use:link href="/game" class="login_game_start_button">게임 시작</a>
-            <a use:link href="/game" class="login_game_start_button">게임 방법</a>
+            <a use:link href="/gamerule" class="login_game_start_button">게임 방법</a>
   
           </div>
           <div class="class_info">
@@ -246,7 +231,7 @@
       <div class="mainscreen">
         <div class="search-display">
           <a use:link href="/search/{search_text}"> <!-- 잘 작동함-->
-            <img src="../image/search_blue.svg" alt="" class="search-button" width="45">
+            <img src="https://i.postimg.cc/rmL1wgwh/search-blue.png" alt="" class="search-button" width="45">
           </a>
           
           <input type="text" class="school-search" id="username" bind:value="{search_text}" on:keydown={func} placeholder="학교명을 검색하세요.">
@@ -255,30 +240,19 @@
         
         </div>
         <div class="unlogin-screen">
-          <img src="../image/start_ui_3.png" alt="" class="mainpage_image" width="500">
+          <img src="https://i.postimg.cc/YCZNJtKB/start-ui-3.png" alt="" class="mainpage_image" width="500">
           <div class="out-border">
             <a use:link href="/user-login/none" class="login_button">로그인</a>
             <a use:link href="/user-create" class="school_button">회원가입</a>
             <a use:link href="/school" class="school_button">학교등록</a>
-            <a use:link href="/game" class="gamerule_button">게임방법</a>
+            <a use:link href="/gamerule" class="gamerule_button">게임방법</a>
           </div>
           
         </div>
-        <!--<div>
-          세로로
-          <div class="unlogin-button">
-            <a href="#" class="BUTTON_XAB">Login</a>
-            
-            <a href="#" class="BUTTON_XAB">Login</a>
-            학교 등록, 로그인 가로로 나타내기
-
-          </div>-->
         <div>
-          <!--게임하러 가기 버튼-->
 
         </div>
         <div>
-          <!-- 게임 플레이 이미지 또는 영상 -->
         </div>
 
 

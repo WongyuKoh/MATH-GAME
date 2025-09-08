@@ -37,7 +37,7 @@
     <div class="container bootstrap snippets bootdey">      
         <div class="" style="min-height:400px;height:auto;">
             <div class="col-md-10 col-md-offset-2 login_center">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal">
                     <div class=" jumbotron text-center form-group text-center">
                         <div class="col-sm-10 reg-icon login_center">
                             <span class="fa fa-user fa-3x"> Sign up</span>
@@ -113,35 +113,4 @@
             </div>
         </div>
     </div>       
-    <!-- <div class="main-body d-flex justify-content-center">
-        <div class="col-md-10">
-            <div class="card text-center">
-                <h3>
-                    <b>학번은 2024학년도 2학년 학번으로 해주세요.</b>
-                    <b>비밀번호는 영어나 숫자로만 해주세요.(한글아나 특수기호를 사용할 시 비밀번호 설정이 제대로 되지 않을 수 있습니다.)</b>
-                </h3>
-            </div>
-        </div>
-    </div>
-    <h5 class="my-3 border-bottom pb-2">회원 가입</h5>
-    <Error error={error} />
-    <form method="post">
-        <div class="mb-3">
-            <label for="username">사용자 이름</label>
-            <input type="text" class="form-control" id="username" bind:value="{username}">
-        </div>
-        <div class="mb-3">
-            <label for="username">사용자 학번</label>
-            <input type="text" class="form-control" id="school_number" bind:value="{school_number}">
-        </div>
-        <div class="mb-3">
-            <label for="password1">비밀번호</label>
-            <input type="password" class="form-control" id="password1" bind:value="{password1}">
-        </div>
-        <div class="mb-3">
-            <label for="password2">비밀번호 확인</label>
-            <input type="password" class="form-control" id="password2" bind:value="{password2}">
-        </div>
-        <button type="submit" class="btn btn-primary" on:click="{post_user}">생성하기</button>
-    </form> -->
 </div>

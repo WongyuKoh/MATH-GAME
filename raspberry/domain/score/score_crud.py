@@ -9,9 +9,6 @@ from starlette import status
 import asyncio
 
 
-def DateTimeNow():
-    nowDate=datetime.datetime.now()
-    return f"{str(nowDate.year)}-{str(nowDate.month)}-{str(nowDate.day)} {str(nowDate.hour)}:{str(nowDate.minute)}:{str(nowDate.second)}.{str(nowDate.microsecond)}"
 
 def check_gametype(db : Session,school_id : int,gametype : str):
     check = db.query(Gametype).filter(Gametype.school_id==school_id).filter(Gametype.typename==gametype).all()

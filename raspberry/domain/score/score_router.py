@@ -23,10 +23,6 @@ def exiting_school(db,school_name):
     
     return school_id
 
-"""class GametypeCreate(BaseModel):
-    school_id : int = 0
-    typename : str = ""
-"""
 
 
 @router.post("/create-score", status_code=status.HTTP_204_NO_CONTENT)

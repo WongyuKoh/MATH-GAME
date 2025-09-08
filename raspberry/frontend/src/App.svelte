@@ -13,31 +13,25 @@
   import UserSetting from './routes/User_setting.svelte'
   import Search from './routes/Search.svelte'
   import School from './routes/School.svelte'
+  import Gamerule from './routes/Gamerule.svelte'
+  import UserRecord from './routes/User_Record.svelte'
 
   const routes = {
-    '/': MainPage,
-    '/home/:class':Home,
-    '/user-create': UserCreate,
-    '/user-login/:school_name': UserLogin,
-    '/profile/:school_number/log/:record_id': Detail,
-    '/profile/:school_number' : User,
-    '/profile/:school_number/Record-Detail/:category':Record_Detail,
-    '/rank' : Rank,
-    '/game' : Game,
-    '/profile/:school_number/setting':UserSetting,
-    '/search/:search_text' : Search,
-    '/school' : School
+    '/': MainPage, /* 로그인 필요 x */
+    '/home/:class':Home, /* 로그인 필요 o */
+    '/user-create': UserCreate, /* 로그인 필요 x */
+    '/user-login/:school_name': UserLogin, /* 로그인 필요 x */
+    '/profile/:school_number/log/:record_id': Detail, /* 로그인 필요 o */
+    '/profile/:school_number' : User, /* 로그인 필요 o */
+    '/profile/:school_number/Record-Detail/:category':Record_Detail, /* 로그인 필요 o */
+    '/rank' : Rank, /* 로그인 필요 o */
+    '/game' : Game, /* 로그인 필요 o */
+    '/profile/:school_number/setting':UserSetting, /* 로그인 필요 o */
+    '/search/:search_text' : Search, /* 로그인 필요 x */
+    '/school' : School, /* 로그인 필요 x */
+    '/gamerule' : Gamerule, /* 로그인 필요 x */
+    '/user-record/:school_number':UserRecord /* 로그인 필요 o */
 
-    
-    /*
-    '/detail/:question_id': Detail,
-    '/question-create': QuestionCreate,
-
-    https://blog37.tistory.com/entry/%EC%8A%A4%EB%B2%A8%ED%8A%B8%EC%97%90%EC%84%9C-%EA%B5%AC%EA%B8%80-%EB%A8%B8%ED%8B%B0%EB%A6%AC%EC%96%BC-%EC%95%84%EC%9D%B4%EC%BD%98Google-Material-Icons-%EC%82%AC%EC%9A%A9-%EB%B0%A9%EB%B2%95
-    
-    구글 머티리얼 아이콘
-    https://fonts.google.com/icons?selected=Material+Symbols+Outlined:search:FILL@0;wght@400;GRAD@0;opsz@24&icon.size=24&icon.color=%23e8eaed
-    */
   }
 </script>
 

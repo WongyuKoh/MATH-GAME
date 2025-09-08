@@ -19,6 +19,8 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     }
     if(method === 'school_post'){
         method = 'post'
+        _url += "?" + new URLSearchParams(params)
+        //console.log(params)
     }
 
     if(operation === 'login') {
@@ -59,7 +61,8 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
     if (method !== 'get') {
         options['body'] = body
     }
-
+    //console.log('!!!!ds')
+    //console.log()
     fetch(_url, options)
         .then(response => { /* fetch 를 통해 들어온 값이 then 의 response 에 입력되서 then 안에 있는 임의 함수를 실행함*/
             

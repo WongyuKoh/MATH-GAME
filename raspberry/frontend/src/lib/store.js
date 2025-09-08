@@ -11,6 +11,7 @@ localStorage 사용법
 
 
 import { writable } from 'svelte/store'
+//import fastapi from "../lib/api"
 
 const persist_storage = (key, initValue) => {
     const storedValueStr = localStorage.getItem(key)
@@ -22,6 +23,7 @@ const persist_storage = (key, initValue) => {
     return store
 }
 
+
 export const rank_category_page = persist_storage("rank_category_page","수열")
 export const sub_category_page = persist_storage("sub_category_page", "")
 export const school_class = persist_storage("school_class", 1)
@@ -32,3 +34,4 @@ export const school_number = persist_storage("school_number", '11111')
 export const school_name = persist_storage("school_name", '')
 export const school_id = persist_storage("school_id", 0)
 export const search_school_page = persist_storage("search_school_page",1)
+export const record_page = persist_storage("record_page", 1)

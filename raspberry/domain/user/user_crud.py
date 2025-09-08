@@ -8,10 +8,10 @@ from argon2 import PasswordHasher
 #pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") bcrypt 코드
 pwd_context = PasswordHasher()
 
+
 def create_user(db: Session, user_create: UserCreate,school_id : int):
     
-    
-    
+
 
     db_user = User(school_number=user_create.school_number,
                     username=user_create.username,
@@ -22,6 +22,8 @@ def create_user(db: Session, user_create: UserCreate,school_id : int):
     
     db.add(db_user)
     db.commit()
+    
+    return db_user.id
     
     
 def get_si2sn(db:Session,school_id:int):
@@ -45,9 +47,28 @@ def get_user(db: Session, school_number: int,school_id : int):
 
     return db.query(User).filter(User.school_number == school_number).filter(User.school_id==school_id).first()
 
-def get_user_detail(db:Session,school_number : int , school_id : int):
+def get_user_detail(db:Session,school_number : int , school_id : int,page : int = 0,cnt : int = 0):
     
-    return db.query(Record).filter(Record.user_id == school_number).filter(Record.school_id==school_id).all()
+    _user = db.query(Record).filter(Record.user_id == school_number).filter(Record.school_id==school_id)
+
+    if page!=0 and cnt!=0:
+        _user = _user.offset(cnt*(page-1)).limit(cnt)
+        
+        
+    return _user.all()
+
+
+def get_user_detail_limit(db:Session,school_number : int , school_id : int,page : int = 0,cnt : int = 0):
+    
+    _user = db.query(Record).filter(Record.user_id == school_number).filter(Record.school_id==school_id).order_by(Record.id.desc())
+    
+    all_cnt = len(_user.all())
+
+    if page!=0 and cnt!=0:
+        _user = _user.offset(cnt*(page-1)).limit(cnt)
+        
+        
+    return _user.all(), all_cnt
 
 
 def get_username(db: Session, school_number: int,school_id : int):
@@ -120,7 +141,7 @@ def user_score_update_all(db:Session,school_id : int): # get 은 filter 없을�
 
 def user_score(db:Session,school_number:int,category:str,school_id : int): # get 은 filter 없을때만 작동
     ID=db.query(Score).filter(Score.school_number == school_number).filter(Score.school_id==school_id).filter(Score.gametype==category).first()
-    
+    print("!!!",school_number,school_id,category)
     return ID.score
     
  

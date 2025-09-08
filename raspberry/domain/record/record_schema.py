@@ -5,6 +5,9 @@ from pydantic import BaseModel,validator
 from domain.detail.detail_schema import Detail
 
 
+class Categorylist(BaseModel):
+    classcategorylist : list = []
+
 class Record(BaseModel):
     id : int = 0
     main_category : str = ""

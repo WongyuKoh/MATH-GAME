@@ -16,7 +16,7 @@ from sqlalchemy import create_engine,MetaData
 import json
 import os
 #'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame'
-URL_DATABASE = 'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame_rev2'#'mysql+pymysql://root:kohwongyu@localhost:3306/MathGame'
+URL_DATABASE = 'mysql+pymysql://root@localhost:3306/mathgame?charset=utf8mb4'#'mysql+pymysql://root:kohwongyu@121.191.57.210/MathGame_rev2'#'mysql+pymysql://root:kohwongyu@localhost:3306/MathGame'
 engine = create_engine(URL_DATABASE)
 
 

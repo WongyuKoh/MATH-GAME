@@ -1,47 +1,3 @@
-<!--
-{
-  "school_number": 20402,
-  "username": "고원규",
-  "records": [
-    {
-      "id": 1,
-      "correct_pb_cnt": 123,
-      "wrong_pb_cnt": 333,
-      "score": 5422,
-      "create_date": "2024-02-18T16:14:12.862612",
-      "detail": []
-    },
-    {
-      "id": 2,
-      "correct_pb_cnt": 4,
-      "wrong_pb_cnt": 2,
-      "score": 444123,
-      "create_date": "2024-02-18T17:10:42.132324",
-      "detail": []
-    },
-    {
-      "id": 3,
-      "correct_pb_cnt": 444,
-      "wrong_pb_cnt": 23,
-      "score": 55,
-      "create_date": "2024-02-18T17:46:14.005700",
-      "detail": [
-        {
-          "category": "a",
-          "problem": "b",
-          "problem_answer": "c",
-          "user_answers": "d"
-        }
-      ]
-    }
-  ]
-
-
-
-
-
--->
-
 <script>
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
@@ -85,7 +41,7 @@
         })
         for(const [index, sub_category] of Main_category.entries()){
             records[sub_category.category_name]={record_list:[]}
-
+            // 유저의 게임 기록
             fastapi("get", "/api/record/record-by-category-all/" + page_school_number+"/"+sub_category.category_name, {}, (json) => {
                 records[sub_category.category_name]=json
                 Main_category[index].cnt=json.record_list.length
@@ -116,10 +72,6 @@
         })
     }
 
-
-
-
-
 </script>
 
 <div class="container">
@@ -129,7 +81,7 @@
             <div class="col-md-3 mb-3"><!-- md : 가로 사이즈, mb : 세로 사이즈-->
                 <div class="card card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://i.ibb.co/CwwJsL4/init-profile.png" alt="Admin" class="rounded-circle" width="150">
+                        <img src="https://i.postimg.cc/Df6r7rkg/init-profile.png" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
                             <h4>{username}({page_school_number})</h4>
                             {#each MAIN_CATEGORY as category_name,i}

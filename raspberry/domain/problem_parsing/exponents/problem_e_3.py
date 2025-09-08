@@ -13,26 +13,30 @@ def text_parsing(pb):
 
 def ax_b(text):
      
-	spl = text.split("x")
-	#print(f"spl : {spl}, text : {text}")
-	last_v=0
+    spl = text.split("x")
+    #print(f"spl : {spl}, text : {text}")
+    last_v=0
 
-	if len(spl)==1 and spl[0]==text:
-		return [0,last_v]
+    if len(spl)==1 and spl[0]==text:
+        return [0,last_v]
 
-	if spl[1]=='':
-		last_v=0
-	else:
-		last_v=int(spl[1].replace("-","").replace("+",""))
+    if spl[1]=='':
+        last_v=0
+    else:
+        last_v=int(spl[1].replace("-","").replace("+",""))
+        if list(spl[1]).count('-')>0:
+            last_v*=-1
+            
 
-	if spl[0]=='':
-		return [1,last_v]
 
-	if spl[0]=='-':
-		return [-1,last_v]
+    if spl[0]=='':
+        return [1,last_v]
 
-	#print(spl)
-	return [int(spl[0]),last_v]
+    if spl[0]=='-':
+        return [-1,last_v]
+
+    #print(spl)
+    return [int(spl[0]),last_v]
 
 
 def number_parsing(pb):

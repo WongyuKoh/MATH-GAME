@@ -20,9 +20,6 @@ router = APIRouter(
     prefix="/api/record",
 )
 
-# class ProblemCreate(BaseModel):
-#     problem : str = ""
-#     category : str = ""
 
 # 학교 체크
 def exiting_school(db,school_name):
@@ -66,6 +63,15 @@ def findtrytime(text):
 	return trytime
 
 
+@router.get("/category_try/{school_class}",response_model=record_schema.Categorylist)
+def category_try(school_class:int,school_name:str,db:Session = Depends(get_db)):
+    school_id = exiting_school(db,school_name)
+    
+    categorylist=record_crud.category_try(db=db,school_class=school_class,school_id=school_id)
+    
+    return {"classcategorylist" : categorylist}
+    
+    
 
 @router.post("/create/{school_number}", status_code=status.HTTP_204_NO_CONTENT)
 def record_create(school_number: int,school_name : str,
@@ -80,6 +86,8 @@ def record_create(school_number: int,school_name : str,
         raise HTTPException(status_code=404, detail="user not found")
     
     
+    #print("#$%#$%#$%")
+    
     # ------ evaluate 위치 ------
     """def user_evaluate(_record_create: record_schema.RecordCreate,
                   db: Session = Depends(get_db), 
@@ -89,11 +97,14 @@ def record_create(school_number: int,school_name : str,
     
     # ------------------------
     
+    #print("HDFG")
+    #print(_record_create.score)
+    
     new_record = record_crud.create_record(db, user=user,
                               record_create=_record_create,school_id=school_id
                               )
 
-    
+    #print("!!@#")
         
     all_cnt=0
 
@@ -101,14 +112,16 @@ def record_create(school_number: int,school_name : str,
         all_cnt+=detail_crud.create_detail(db,record=new_record,detail_create=game_problem)
         
             
+        #print("#@$@",_record_create.main_category)
             
         pbd_crud.create_problem(db,
                                 problem_create=ProblemCreate(problem=game_problem.problem,
                                                              category=game_problem.category,
                                                              bundles_idx_list="",
-                                                             answer=game_problem.problem_answer),
+                                                             answer=game_problem.problem_answer,main_category=_record_create.main_category),
                                 
-                                trytime=findtrytime(game_problem.user_answers)) # 랜덤 문제라고 하더라도 결국 틀이 있고 ,사전에 랜덤 문제의 형태를 넣어줘야되기 때문에 db 에 다 있음
+                                trytime=findtrytime(game_problem.user_answers),
+                                main_category=_record_create.main_category) # 랜덤 문제라고 하더라도 결국 틀이 있고 ,사전에 랜덤 문제의 형태를 넣어줘야되기 때문에 db 에 다 있음
     """bundles_idx_list : str = "" # 음수 값 들어가는 건 그 값을 idx 가 아닌 실제로 이용하겠다는 의미, - 를 붙여서 사용
 problem_digit_idx_list : str = "" 
     """

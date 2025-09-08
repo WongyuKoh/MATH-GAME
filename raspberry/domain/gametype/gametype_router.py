@@ -33,7 +33,7 @@ def user_record_class_cnt_all(gametype_input : gametype_schema.GametypeCreate,
     
     school_id = exiting_school(db,gametype_input.school_name)
 
-    v = gametype_crud.create_type(db=db,school_id = school_id, typename=gametype_input.typename)
+    v = gametype_crud.create_type(db=db,school_id = school_id, typename=gametype_input.typename,school_name=gametype_input.school_name)
     
     if v==0:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="존재하는 게임 유형입니다.")

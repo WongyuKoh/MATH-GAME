@@ -25,12 +25,13 @@
             now_page : _search_school_page
 
         }
+        // 값이 없는거 입력하면 에러남
         fastapi("get", "/api/school/limited-search-list", params, (json) => {
 
             if(json.search_data_cnt==0){
                 total_page = 1
             }else{
-                total_page = (json.serach_data_cnt-1)/   + 1
+                total_page = (json.serach_data_cnt-1)/search_data_cnt   + 1
             }
             search_school_list = json.school_search_list
             site_search_text = search_text
@@ -42,37 +43,36 @@
     function func(e){
         if(e.keyCode==13){
             if(search_text==""){
-                window.location.href = '/#/search/noinput';
+                window.location.href = './#/search/noinput';
                 search_result('noinput',1)
             }else{
-                window.location.href = '/#/search/'+search_text;
+                window.location.href = './#/search/'+search_text;
                 search_result(search_text,1)
             }   
 		}
     }
-    /* 
-    $: 는 svelte 에서 반응형 을 의미함, 즉 api 호출이 있으면 바뀐 total과 size에 대해 total_page를 구한다
-    */
-    /* $가 변수 앞에 변수 앞에 붙는 이유는 다른 변수들과의 이름이 중복되지 않도록, 잘쓰지 않는 기호를 앞에 붙여준거*/
-
+    function search_new_text(){
+        if(search_text==""){
+            window.location.href = './#/search/noinput';
+            search_result('noinput',1)
+        }else{
+            window.location.href = './#/search/'+search_text;
+            search_result(search_text,1)
+        }  
+    }
+	 
     $:search_result(site_search_text,1)
 
 </script>
 
-<!--
-https://aboooks.tistory.com/59
-tr  : table row, 가로줄 만드는거(데이터 들어가는 라인의 가장 윗부분 대로)
-th : table head , 표의 제목
-td : table data, 셀을 만드는 역할
--->
 <div class="container my-3">
 
   <div class="SCREEN">
 
     <div class="mainscreen">
         <div class="search-display">
-        <a use:link href="/search/{search_text}">
-            <img src="../image/search_blue.svg" alt="" class="search-button" width="45">
+        <a use:link href="/search/{search_text}" on:click={search_new_text}>
+            <img src="https://i.postimg.cc/rmL1wgwh/search-blue.png" alt="" class="search-button" width="45">
         </a>
         
         <input type="text" class="school-search" id="username" bind:value="{search_text}" on:keydown={func} placeholder="학교명을 검색하세요.">
@@ -98,7 +98,7 @@ td : table data, 셀을 만드는 역할
             {#each search_school_list as _school_name, i}
                 {#if i<search_data_cnt}
                   <div class="card-body pt-2 pb-1">
-                      <a href="/#/user-login/{_school_name.school_name}" style="text-decoration:none; color:black">
+                      <a use:link href="/user-login/{_school_name.school_name}" style="text-decoration:none; color:black">
                           <div role="button" class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style jc_sb">
                               
                               <div class="medal-rank-blank">

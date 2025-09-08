@@ -20,9 +20,11 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
     //console.log(login_school_name)
 	function school_register(){
 
+        //console.log('!!!!!!!!!!!')
+
 		let params = {
 			school_name : school_name,
-			school_address : school_address
+			address : school_address
 		}
 
 		fastapi("school_post", "/api/school/create", params, (json) => {
@@ -40,7 +42,7 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
       
         <div class="" style="min-height:400px;height:auto;">
           <div class="col-md-10 col-md-offset-2 login_center">
-              <form class="form-horizontal" role="form">
+              <form class="form-horizontal">
                     <div class=" jumbotron text-center form-group text-center">
                         <div class="col-sm-10 reg-icon login_center">
                             <span class="fa fa-user fa-3x"> School Register</span>
@@ -83,22 +85,4 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
           </div>
         </div>
       </div>               
-
-    <!-- <h5 class="my-3 border-bottom pb-2">로그인</h5>
-    <Error error={error} />
-    <form method="post">
-        <div class="mb-3">
-            <label for="username">사용자 학교</label>
-            <input type="text" class="form-control" id="schoolname" bind:value="{login_school_name}" placeholder="enter your school name">
-        </div>
-        <div class="mb-3">
-            <label for="username">사용자 이름</label>
-            <input type="text" class="form-control" id="username" bind:value="{login_username}" placeholder="enter your name">
-        </div>
-        <div class="mb-3">
-            <label for="password">비밀번호</label>
-            <input type="password" class="form-control" id="password" bind:value="{login_password}" placeholder="enter your password">
-        </div>
-        <button type="submit" class="btn btn-primary" on:click="{login}">로그인</button>
-    </form> -->
 </div>

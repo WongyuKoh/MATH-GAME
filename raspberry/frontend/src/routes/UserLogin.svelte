@@ -71,7 +71,7 @@ argon2.exceptions.VerifyMismatchError: The password does not match the supplied 
       
         <div class="" style="min-height:400px;height:auto;">
           <div class="col-md-10 col-md-offset-2 login_center">
-              <form class="form-horizontal" role="form">
+              <form class="form-horizontal">
                     <div class=" jumbotron text-center form-group text-center">
                         <div class="col-sm-10 reg-icon login_center">
                             <span class="fa fa-user fa-3x"> Sign in</span>

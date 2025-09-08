@@ -5,6 +5,7 @@ from starlette import status
 from database import get_db
 from domain.school import school_schema,school_crud
 from domain.user import user_crud
+from domain.gametype import gametype_crud
 
 router = APIRouter(
     prefix="/api/school",
@@ -18,7 +19,6 @@ def exiting_school(db,school_name):
         return 0
     
     return 1
-    
 
 
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
@@ -29,7 +29,12 @@ def school_create(_school_create: school_schema.SchoolCreate,
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="학교가 이미 존재합니다.")
     
     
-    school_crud.create_school(db,_school_create.school_name,address=_school_create.address)
+    db_school = school_crud.create_school(db,_school_create.school_name,address=_school_create.address)
+    
+    gametype_crud.create_type(db=db,school_id = db_school.school_id,typename="수열",school_name=_school_create.school_name)
+    gametype_crud.create_type(db=db,school_id = db_school.school_id,typename="로그",school_name=_school_create.school_name)
+    gametype_crud.create_type(db=db,school_id = db_school.school_id,typename="지수",school_name=_school_create.school_name)
+    
 
 @router.get("/list",response_model=school_schema.SchoolList)
 def school_list(db:Session = Depends(get_db)):

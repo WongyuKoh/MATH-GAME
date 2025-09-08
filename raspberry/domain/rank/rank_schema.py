@@ -1,8 +1,5 @@
 from pydantic import BaseModel, validator, EmailStr
 
-
-
-
 class Rank(BaseModel):
     school_number : int = 11111
     username : str = ""
