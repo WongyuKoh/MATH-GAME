@@ -14,7 +14,7 @@
     "@sveltejs/adapter-static": "^3.0.2",
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "@tauri-apps/cli": "^1.6.0",
-    "electron": "^31.1.0",
+    "electron": "^41.10.6",
     "svelte": "^4.2.10",
     "svelte-google-materialdesign-icons": "^1.0.3",
     "typescript": "^5.5.3",
